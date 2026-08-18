@@ -127,14 +127,16 @@ const fadeUp = {
   })
 };
 
+const PUBLIC_WHATSAPP_NUMBER = "5538991532617";
+
 const handleContact = () => {
-  window.open("https://wa.me/5538991532617?text=Hi!%20I%20found%20Ideal%20Landing%20Co.%20and%20I%27d%20like%20to%20talk%20about%20a%20landing%20page%20project.", "_blank");
+  window.open(`https://wa.me/${PUBLIC_WHATSAPP_NUMBER}?text=Hi!%20I%20found%20Ideal%20Landing%20Co.%20and%20I%27d%20like%20to%20talk%20about%20a%20landing%20page%20project.`, "_blank", "noopener,noreferrer");
 };
 
 // Button-in-Button CTA Architecture (Haptic Micro-Aesthetic)
-const MagneticCTA = ({ text, className = "", primary = true }: { text: string, className?: string, primary?: boolean }) => (
+const MagneticCTA = ({ text, className = "", primary = true, onClick }: { text: string, className?: string, primary?: boolean, onClick?: (e: React.MouseEvent) => void }) => (
   <button 
-    onClick={handleContact}
+    onClick={onClick || handleContact}
     className={`group relative pl-8 pr-[4.5rem] py-4 rounded-full font-bold tracking-wide active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] ${
       primary 
         ? "bg-[#FFDE21] text-black shadow-[0_0_30px_rgba(255,222,33,0.3)] hover:shadow-[0_0_50px_rgba(255,222,33,0.5)]" 
@@ -429,6 +431,72 @@ const PremiumLanding = () => {
   const problemRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
+  const auditRef = useRef<HTMLDivElement>(null);
+
+  const handleAuditScroll = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const auditEl = document.getElementById("audit");
+    if (auditEl) {
+      auditEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const [formData, setFormData] = useState({
+    landingPageUrl: "",
+    hasLandingPage: true,
+    primaryGoal: "",
+    trafficSource: "",
+    name: "",
+    company: "",
+    notes: ""
+  });
+  const [currentStep, setCurrentStep] = useState(1);
+  const [urlError, setUrlError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [companyError, setCompanyError] = useState("");
+
+  const handleNext = () => {
+    if (currentStep === 1) {
+      if (formData.hasLandingPage) {
+        const url = formData.landingPageUrl.trim();
+        if (!url) {
+          setUrlError("Please enter a valid website URL.");
+          return;
+        }
+        const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
+        if (!urlRegex.test(url)) {
+          setUrlError("Please enter a valid website URL.");
+          return;
+        }
+      }
+      setUrlError("");
+    } else if (currentStep === 2) {
+      if (!formData.primaryGoal) return;
+    } else if (currentStep === 3) {
+      if (!formData.trafficSource) return;
+    } else if (currentStep === 4) {
+      let valid = true;
+      if (!formData.name.trim()) {
+        setNameError("Please enter your name.");
+        valid = false;
+      } else {
+        setNameError("");
+      }
+      if (!formData.company.trim()) {
+        setCompanyError("Please enter your company name.");
+        valid = false;
+      } else {
+        setCompanyError("");
+      }
+      if (!valid) return;
+    }
+
+    setCurrentStep(prev => prev + 1);
+  };
+
+  const handleBack = () => {
+    setCurrentStep(prev => Math.max(1, prev - 1));
+  };
 
   useGSAP(() => {
     if (!heroRef.current) return;
@@ -756,7 +824,7 @@ const PremiumLanding = () => {
           </div>
           
           <div className="hidden md:block">
-            <button onClick={handleContact} className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-[#FFDE21] hover:text-black border border-white/10 text-xs font-bold uppercase tracking-widest transition-all duration-500">
+            <button onClick={handleAuditScroll} className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-[#FFDE21] hover:text-black border border-white/10 text-xs font-bold uppercase tracking-widest transition-all duration-500">
               Get a Free Audit
             </button>
           </div>
@@ -804,7 +872,7 @@ const PremiumLanding = () => {
                 transition={{ delay: 0.4, duration: 0.8, ease: premiumEasing }}
                 className="mt-8"
               >
-                 <MagneticCTA text="Get a Free Audit" />
+                 <MagneticCTA text="Get a Free Audit" onClick={(e) => { setIsMenuOpen(false); handleAuditScroll(e); }} />
               </motion.div>
             </div>
           </motion.div>
@@ -841,7 +909,7 @@ const PremiumLanding = () => {
                 </p>
 
                 <div className="hero-ctas flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-8">
-                  <MagneticCTA text="Get Your Free Landing Page Audit" />
+                  <MagneticCTA text="Get Your Free Landing Page Audit" onClick={handleAuditScroll} />
                 </div>
               </div>
 
@@ -1263,13 +1331,570 @@ const PremiumLanding = () => {
                 Get a free landing page audit and we'll help you identify what you actually need.
               </p>
               <button 
-                onClick={handleContact}
+                onClick={handleAuditScroll}
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21] hover:text-white transition-colors duration-300 border-b border-[#FFDE21] hover:border-white pb-1"
               >
                 GET A FREE AUDIT →
               </button>
             </div>
 
+          </div>
+        </section>
+
+        {/* Free Landing Page Audit Section */}
+        <section ref={auditRef} id="audit" className="py-20 lg:py-32 relative z-10 bg-[#050505] border-t border-white/5 overflow-hidden">
+          <div className="container mx-auto px-4 lg:px-8 max-w-6xl w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start w-full">
+              
+              {/* Left Column: Intro */}
+              <div className="lg:col-span-5 space-y-6 text-center lg:text-left lg:sticky lg:top-36">
+                <span className="text-[#FFDE21] text-xs font-black uppercase tracking-[0.2em] block">
+                  FREE LANDING PAGE AUDIT
+                </span>
+                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-none text-white">
+                  Let's find out what's costing you conversions.
+                </h2>
+                <p className="text-white/40 text-base leading-relaxed font-medium">
+                  Answer a few quick questions and we'll review your landing page for opportunities to improve clarity, conversion and performance.
+                </p>
+              </div>
+
+              {/* Right Column: Multi-step Form */}
+              <div className="lg:col-span-7 bg-white/[0.01] border border-white/10 rounded-[2rem] p-6 sm:p-8 lg:p-10 relative text-left">
+                
+                {/* Step indicators */}
+                {currentStep <= 4 && (
+                  <div className="flex items-center justify-between max-w-md mx-auto mb-10 select-none">
+                    {[
+                      { number: "01", label: "Page" },
+                      { number: "02", label: "Goal" },
+                      { number: "03", label: "Traffic" },
+                      { number: "04", label: "Contact" }
+                    ].map((step, idx) => (
+                      <React.Fragment key={idx}>
+                        <div className="flex flex-col items-center">
+                          <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                            currentStep === idx + 1
+                              ? "border-[#FFDE21] text-[#FFDE21] bg-[#FFDE21]/10 font-black scale-105"
+                              : currentStep > idx + 1
+                              ? "border-[#FFDE21] text-black bg-[#FFDE21]"
+                              : "border-white/10 text-white/30 bg-transparent"
+                          }`}>
+                            {step.number}
+                          </div>
+                        </div>
+                        {idx < 3 && (
+                          <div className={`flex-grow h-[2px] mx-2 sm:mx-4 transition-colors duration-300 ${
+                            currentStep > idx + 1 ? "bg-[#FFDE21]" : "bg-white/10"
+                          }`} />
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                )}
+
+                {/* Form Steps */}
+                <AnimatePresence mode="wait">
+                  
+                  {/* STEP 1: Landing Page URL */}
+                  {currentStep === 1 && (
+                    <motion.div
+                      key="step1"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                          What's your current landing page?
+                        </h3>
+                        <p className="text-white/50 text-xs sm:text-sm font-medium">
+                          Share the page you'd like us to review.
+                        </p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <label htmlFor="landingPageUrl" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                            Website / Landing Page URL
+                          </label>
+                          <input
+                            type="text"
+                            id="landingPageUrl"
+                            disabled={!formData.hasLandingPage}
+                            placeholder="https://yourwebsite.com"
+                            value={formData.landingPageUrl}
+                            onChange={(e) => {
+                              setFormData(prev => ({ ...prev, landingPageUrl: e.target.value }));
+                              setUrlError("");
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && formData.hasLandingPage) {
+                                e.preventDefault();
+                                handleNext();
+                              }
+                            }}
+                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/20 focus:outline-none transition-all duration-300 font-medium ${
+                              urlError 
+                                ? "border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+                                : !formData.hasLandingPage
+                                ? "border-white/5 opacity-30 select-none"
+                                : "border-white/10 focus:border-[#FFDE21] focus:ring-1 focus:ring-[#FFDE21]"
+                            }`}
+                          />
+                          {urlError && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">
+                              {urlError}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Checkbox option */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              hasLandingPage: !prev.hasLandingPage,
+                              landingPageUrl: !prev.hasLandingPage ? "" : prev.landingPageUrl
+                            }));
+                            setUrlError("");
+                          }}
+                          className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 ${
+                            !formData.hasLandingPage
+                              ? "border-[#FFDE21] bg-[#FFDE21]/5 text-white"
+                              : "border-white/10 bg-transparent text-white/50 hover:border-white/20 hover:text-white"
+                          }`}
+                        >
+                          <span className="text-xs sm:text-sm font-semibold">I don't have a landing page yet</span>
+                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${
+                            !formData.hasLandingPage ? "border-[#FFDE21] bg-[#FFDE21]" : "border-white/20 bg-transparent"
+                          }`}>
+                            {!formData.hasLandingPage && (
+                              <svg className="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </div>
+                        </button>
+                      </div>
+
+                      {/* Primary CTA */}
+                      <button
+                        type="button"
+                        onClick={handleNext}
+                        className="w-full bg-[#FFDE21] text-black font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                      >
+                        <span>CONTINUE</span>
+                        <span>→</span>
+                      </button>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 2: Primary Goal */}
+                  {currentStep === 2 && (
+                    <motion.div
+                      key="step2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                          What do you want more of?
+                        </h3>
+                        <p className="text-white/50 text-xs sm:text-sm font-medium">
+                          Choose the primary result you want your landing page to generate.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {["Leads", "Booked Calls", "Sales", "Purchases", "Other"].map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({ ...prev, primaryGoal: opt }));
+                            }}
+                            className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 ${
+                              formData.primaryGoal === opt
+                                ? "border-[#FFDE21] bg-[#FFDE21]/5 text-white shadow-[0_0_15px_rgba(255,222,33,0.1)]"
+                                : "border-white/10 bg-transparent text-white/50 hover:border-white/20 hover:text-white"
+                            }`}
+                          >
+                            <span className="text-xs sm:text-sm font-semibold">{opt}</span>
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                              formData.primaryGoal === opt ? "border-[#FFDE21] bg-[#FFDE21]" : "border-white/20 bg-transparent"
+                            }`}>
+                              {formData.primaryGoal === opt && (
+                                <div className="w-2 h-2 rounded-full bg-black" />
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Navigation buttons */}
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button
+                          type="button"
+                          onClick={handleBack}
+                          className="w-full sm:w-1/3 bg-transparent border border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-full transition-all duration-300"
+                        >
+                          ← BACK
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleNext}
+                          disabled={!formData.primaryGoal}
+                          className={`w-full sm:w-2/3 font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ${
+                            formData.primaryGoal 
+                              ? "bg-[#FFDE21] text-black" 
+                              : "bg-white/5 text-white/20 border border-white/5 cursor-not-allowed"
+                          }`}
+                        >
+                          <span>CONTINUE</span>
+                          <span>→</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 3: Traffic Source */}
+                  {currentStep === 3 && (
+                    <motion.div
+                      key="step3"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                          Where does most of your traffic come from?
+                        </h3>
+                        <p className="text-white/50 text-xs sm:text-sm font-medium">
+                          Choose the main source currently sending visitors to your business.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {[
+                          "Google Ads", "Meta Ads", "Organic Search", 
+                          "Social Media", "Not running traffic yet", "Other"
+                        ].map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({ ...prev, trafficSource: opt }));
+                            }}
+                            className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 ${
+                              formData.trafficSource === opt
+                                ? "border-[#FFDE21] bg-[#FFDE21]/5 text-white shadow-[0_0_15px_rgba(255,222,33,0.1)]"
+                                : "border-white/10 bg-transparent text-white/50 hover:border-white/20 hover:text-white"
+                            }`}
+                          >
+                            <span className="text-xs sm:text-sm font-semibold">{opt}</span>
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                              formData.trafficSource === opt ? "border-[#FFDE21] bg-[#FFDE21]" : "border-white/20 bg-transparent"
+                            }`}>
+                              {formData.trafficSource === opt && (
+                                <div className="w-2 h-2 rounded-full bg-black" />
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Navigation buttons */}
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button
+                          type="button"
+                          onClick={handleBack}
+                          className="w-full sm:w-1/3 bg-transparent border border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-full transition-all duration-300"
+                        >
+                          ← BACK
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleNext}
+                          disabled={!formData.trafficSource}
+                          className={`w-full sm:w-2/3 font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ${
+                            formData.trafficSource 
+                              ? "bg-[#FFDE21] text-black" 
+                              : "bg-white/5 text-white/20 border border-white/5 cursor-not-allowed"
+                          }`}
+                        >
+                          <span>CONTINUE</span>
+                          <span>→</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 4: Contact Context */}
+                  {currentStep === 4 && (
+                    <motion.div
+                      key="step4"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                          Tell us who we're talking to.
+                        </h3>
+                        <p className="text-white/50 text-xs sm:text-sm font-medium">
+                          Let us know your context so we can tailor the audit.
+                        </p>
+                      </div>
+
+                      <div className="space-y-4">
+                        
+                        {/* Name field */}
+                        <div className="space-y-2">
+                          <label htmlFor="clientName" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="clientName"
+                            placeholder="John Smith"
+                            value={formData.name}
+                            onChange={(e) => {
+                              setFormData(prev => ({ ...prev, name: e.target.value }));
+                              setNameError("");
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleNext();
+                              }
+                            }}
+                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/20 focus:outline-none transition-all duration-300 font-medium ${
+                              nameError ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-[#FFDE21]"
+                            }`}
+                          />
+                          {nameError && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">
+                              {nameError}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Company field */}
+                        <div className="space-y-2">
+                          <label htmlFor="companyName" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                            Company / Business Name
+                          </label>
+                          <input
+                            type="text"
+                            id="companyName"
+                            placeholder="Smith Dental"
+                            value={formData.company}
+                            onChange={(e) => {
+                              setFormData(prev => ({ ...prev, company: e.target.value }));
+                              setCompanyError("");
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleNext();
+                              }
+                            }}
+                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/20 focus:outline-none transition-all duration-300 font-medium ${
+                              companyError ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-[#FFDE21]"
+                            }`}
+                          />
+                          {companyError && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">
+                              {companyError}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Notes field */}
+                        <div className="space-y-2">
+                          <label htmlFor="auditNotes" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                            Anything we should know? <span className="text-white/20 lowercase font-medium">(optional)</span>
+                          </label>
+                          <textarea
+                            id="auditNotes"
+                            placeholder="Tell us anything that could help us understand your landing page or campaign."
+                            value={formData.notes}
+                            onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                            rows={3}
+                            className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/20 focus:outline-none focus:border-[#FFDE21] transition-all duration-300 font-medium resize-y"
+                          />
+                        </div>
+
+                      </div>
+
+                      {/* Navigation buttons */}
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button
+                          type="button"
+                          onClick={handleBack}
+                          className="w-full sm:w-1/3 bg-transparent border border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-full transition-all duration-300"
+                        >
+                          ← BACK
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleNext}
+                          className="w-full sm:w-2/3 bg-[#FFDE21] text-black font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                        >
+                          <span>REVIEW MY ANSWERS</span>
+                          <span>→</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 5: Final Summary Screen */}
+                  {currentStep === 5 && (
+                    <motion.div
+                      key="step5"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <span className="text-[#FFDE21] text-[10px] font-black uppercase tracking-[0.2em] block">
+                          YOUR AUDIT REQUEST IS READY
+                        </span>
+                        <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+                          Let's take this to WhatsApp.
+                        </h3>
+                        <p className="text-white/50 text-xs sm:text-sm font-medium">
+                          We've organized your answers into a message. Send it to our team and we'll take it from there.
+                        </p>
+                      </div>
+
+                      {/* Polished Summary Panel */}
+                      <div className="border border-white/10 rounded-2xl bg-white/[0.02] p-5 sm:p-6 space-y-4 text-xs sm:text-sm">
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-white/5">
+                          <div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">
+                              LANDING PAGE
+                            </span>
+                            <span className="text-white font-semibold break-all">
+                              {formData.hasLandingPage ? formData.landingPageUrl : "Not created yet"}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">
+                              MAIN GOAL
+                            </span>
+                            <span className="text-white font-semibold">
+                              {formData.primaryGoal}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-white/5">
+                          <div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">
+                              TRAFFIC SOURCE
+                            </span>
+                            <span className="text-white font-semibold">
+                              {formData.trafficSource}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">
+                              NAME
+                            </span>
+                            <span className="text-white font-semibold">
+                              {formData.name}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">
+                            COMPANY
+                          </span>
+                          <span className="text-white font-semibold">
+                            {formData.company}
+                          </span>
+                        </div>
+
+                        {formData.notes.trim() && (
+                          <div className="pt-4 border-t border-white/5">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">
+                              ADDITIONAL CONTEXT
+                            </span>
+                            <p className="text-white/70 font-medium whitespace-pre-wrap leading-relaxed max-h-32 overflow-y-auto pr-2">
+                              {formData.notes}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Edit option */}
+                      <div className="text-center sm:text-left">
+                        <button
+                          type="button"
+                          onClick={() => setCurrentStep(1)}
+                          className="text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21] hover:text-white transition-colors duration-300 border-b border-[#FFDE21]/40 hover:border-white pb-0.5"
+                        >
+                          EDIT MY ANSWERS
+                        </button>
+                      </div>
+
+                      {/* Primary WhatsApp CTA & reassurance */}
+                      <div className="space-y-4 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const message = `Hi! I found Ideal Landing Co. and I'd like to request a free landing page audit.
+
+Name: ${formData.name.trim()}
+Company: ${formData.company.trim()}
+Current landing page: ${formData.hasLandingPage ? formData.landingPageUrl.trim() : "I don't have one yet"}
+Main goal: ${formData.primaryGoal}
+Traffic source: ${formData.trafficSource}${formData.notes.trim() ? `
+
+Additional context:
+${formData.notes.trim()}` : ""}
+
+I'd like to know what could be improved to increase conversions.`;
+
+                            const encodedMessage = encodeURIComponent(message);
+                            const url = `https://wa.me/${PUBLIC_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+                            window.open(url, "_blank", "noopener,noreferrer");
+                          }}
+                          className="w-full bg-[#FFDE21] text-black font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(255,222,33,0.2)] hover:shadow-[0_0_40px_rgba(255,222,33,0.3)] transition-all duration-300"
+                        >
+                          <span>SEND MY REQUEST ON WHATSAPP</span>
+                          <span>→</span>
+                        </button>
+                        
+                        <div className="text-center text-[10px] sm:text-xs text-white/30 space-y-1 font-medium select-none">
+                          <p>Your answers will be included automatically.</p>
+                          <p>You'll be able to review the message before sending it.</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                </AnimatePresence>
+
+              </div>
+
+            </div>
           </div>
         </section>
 
