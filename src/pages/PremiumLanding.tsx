@@ -423,6 +423,45 @@ const pricingPackages = [
   }
 ];
 
+const faqData = [
+  {
+    question: "How long does it take to build a landing page?",
+    answer: "Most projects follow a defined timeline based on scope, content and integrations. We'll confirm the schedule before starting."
+  },
+  {
+    question: "Do you write the copy?",
+    answer: "Yes. Our Conversion and Campaign packages include conversion-focused copywriting built around your offer, audience and goals."
+  },
+  {
+    question: "Do you use templates?",
+    answer: "No. Each landing page is designed around your brand, offer and conversion objective."
+  },
+  {
+    question: "Can you work with my marketing agency?",
+    answer: "Yes. We can work as a landing page production partner for paid media and performance marketing agencies."
+  },
+  {
+    question: "Can you improve my existing landing page?",
+    answer: "Yes. We can audit your current page and identify opportunities in messaging, structure, design and conversion flow."
+  },
+  {
+    question: "Can you integrate forms, calendars and tracking?",
+    answer: "Yes. We can integrate forms, booking tools, analytics, tracking pixels and other tools required by the project."
+  },
+  {
+    question: "Do I need to provide all the content?",
+    answer: "It depends on the package. If copywriting is included, we develop the page messaging based on your offer and information gathered during onboarding."
+  },
+  {
+    question: "What happens after the landing page is launched?",
+    answer: "We validate the final implementation, responsiveness, integrations and tracking included in the project before handoff."
+  },
+  {
+    question: "What if I'm not sure which package I need?",
+    answer: "Start with the free landing page audit. We'll look at your current situation and help you understand which level of support makes sense."
+  }
+];
+
 const PremiumLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -432,6 +471,7 @@ const PremiumLanding = () => {
   const processRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
   const auditRef = useRef<HTMLDivElement>(null);
+  const faqRef = useRef<HTMLDivElement>(null);
 
   const handleAuditScroll = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -454,6 +494,21 @@ const PremiumLanding = () => {
   const [urlError, setUrlError] = useState("");
   const [nameError, setNameError] = useState("");
   const [companyError, setCompanyError] = useState("");
+
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", listener);
+    return () => mediaQuery.removeEventListener("change", listener);
+  }, []);
+
+  const handleToggleFaq = (index: number) => {
+    setOpenFaqIndex(prev => (prev === index ? null : index));
+  };
 
   const handleNext = () => {
     if (currentStep === 1) {
@@ -1895,6 +1950,96 @@ I'd like to know what could be improved to increase conversions.`;
               </div>
 
             </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section ref={faqRef} id="faq" className="py-20 lg:py-32 relative z-10 bg-[#050505] border-t border-white/5 overflow-hidden">
+          <div className="container mx-auto px-4 lg:px-8 max-w-4xl w-full">
+            
+            {/* Section Header */}
+            <div className="mb-12 lg:mb-16 text-center max-w-2xl mx-auto space-y-4">
+              <span className="text-[#FFDE21] text-xs font-black uppercase tracking-[0.2em] block">
+                FAQ
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tighter leading-none text-white">
+                Questions before we get started?
+              </h2>
+              <p className="text-white/40 text-xs sm:text-sm leading-relaxed font-medium">
+                Everything you need to know before starting your landing page project.
+              </p>
+            </div>
+
+            {/* Accordion List */}
+            <div className="space-y-0 border-t border-white/[0.08] mb-16 lg:mb-20 w-full">
+              {faqData.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div key={idx} className="border-b border-white/[0.08] group w-full">
+                    <h3>
+                      <button
+                        type="button"
+                        id={`faq-btn-${idx}`}
+                        aria-expanded={isOpen}
+                        aria-controls={`faq-panel-${idx}`}
+                        onClick={() => handleToggleFaq(idx)}
+                        className="w-full flex items-center justify-between py-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all duration-300"
+                      >
+                        <span className={`text-sm sm:text-base md:text-lg font-bold tracking-tight text-white/85 transition-colors duration-300 group-hover:text-white ${isOpen ? 'text-white font-extrabold' : ''}`}>
+                          {faq.question}
+                        </span>
+                        
+                        {/* Expand/Collapse Indicator (+/-) */}
+                        <span className={`text-lg sm:text-xl font-bold ml-6 select-none transition-colors duration-300 ${
+                          isOpen ? 'text-[#FFDE21]' : 'text-white/40 group-hover:text-[#FFDE21]'
+                        }`}>
+                          {isOpen ? "−" : "+"}
+                        </span>
+                      </button>
+                    </h3>
+                    
+                    <motion.div
+                      id={`faq-panel-${idx}`}
+                      role="region"
+                      aria-labelledby={`faq-btn-${idx}`}
+                      initial={false}
+                      animate={{
+                        height: isOpen ? "auto" : 0,
+                        opacity: isOpen ? 1 : 0
+                      }}
+                      transition={{
+                        duration: prefersReducedMotion ? 0 : 0.25,
+                        ease: "easeInOut"
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-6 text-white/50 text-xs sm:text-sm leading-relaxed max-w-2xl font-medium">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Closing FAQ CTA Bridge */}
+            <div className="text-center max-w-xl mx-auto space-y-4 border-t border-white/5 pt-12">
+              <h3 className="text-base sm:text-lg font-bold uppercase tracking-tight text-white">
+                Still not sure where to start?
+              </h3>
+              <p className="text-white/40 text-xs sm:text-sm leading-relaxed font-medium">
+                Get a free landing page audit and we'll show you what we'd improve.
+              </p>
+              <div>
+                <button
+                  onClick={handleAuditScroll}
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21] hover:text-white transition-colors duration-300 border-b border-[#FFDE21]/40 hover:border-white pb-1"
+                >
+                  GET MY FREE AUDIT →
+                </button>
+              </div>
+            </div>
+
           </div>
         </section>
 
