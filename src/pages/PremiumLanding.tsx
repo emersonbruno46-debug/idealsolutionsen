@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,7 +8,12 @@ import {
   Instagram, Linkedin, Twitter, Menu, X
 } from "lucide-react";
 import { LogoPremium } from "@/components/premium/LogoPremium";
-import { ProjectShowcase } from "@/components/premium/ProjectShowcase";
+
+const ProjectShowcase = lazy(() =>
+  import("@/components/premium/ProjectShowcase").then((module) => ({
+    default: module.ProjectShowcase,
+  }))
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -853,8 +858,9 @@ const PremiumLanding = () => {
       {/* Vibe & Texture: Ethereal Glass */}
       <div className="fixed inset-0 z-0 opacity-100 scale-100">
         <img 
-          src="/premium-bg-new.png" 
+          src="/premium-bg-new.webp" 
           alt="Background" 
+          loading="eager"
           className="w-full h-full object-cover opacity-60 mix-blend-screen"
         />
       </div>
@@ -987,8 +993,12 @@ const PremiumLanding = () => {
                         className="relative z-10 hero-image-loop"
                       >
                         <img 
-                          src="/hero-image.png" 
+                          src="/hero-image.webp" 
                           alt="Ideal Landing Co. Team" 
+                          loading="eager"
+                          fetchPriority="high"
+                          width={900}
+                          height={600}
                           className="w-full max-w-[600px] xl:max-w-[900px] h-auto object-contain drop-shadow-[0_0_50px_rgba(0,0,0,0.6)] group-hover:scale-[1.02] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]" 
                         />
                       </motion.div>
@@ -1224,8 +1234,15 @@ const PremiumLanding = () => {
         </section>
 
         {/* Portfolio Section — ProjectShowcase */}
-        <div id="work">
-          <ProjectShowcase />
+        <div id="work" className="min-h-[500px]">
+          <Suspense fallback={
+            <div className="py-20 flex flex-col items-center justify-center text-center space-y-4">
+              <div className="w-8 h-8 border-2 border-[#FFDE21] border-t-transparent rounded-full animate-spin" />
+              <p className="text-white/20 text-xs font-black uppercase tracking-[0.2em]">Loading Portfolio...</p>
+            </div>
+          }>
+            <ProjectShowcase />
+          </Suspense>
         </div>
 
         {/* Cinematic Testimonial Split */}
@@ -1258,7 +1275,15 @@ const PremiumLanding = () => {
                         <p className="text-base md:text-xl text-white/70 leading-relaxed font-medium mb-8 md:mb-10">"{testimonialsData[activeTestimonial].text}"</p>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center shrink-0">
-                             <img src={`/testimonial-${activeTestimonial + 1}.png`} alt={testimonialsData[activeTestimonial].name} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                             <img 
+                               src={`/testimonial-${activeTestimonial + 1}.webp`} 
+                               alt={testimonialsData[activeTestimonial].name} 
+                               width={48}
+                               height={48}
+                               loading="lazy"
+                               className="w-full h-full object-cover" 
+                               onError={(e) => (e.currentTarget.style.display = 'none')} 
+                             />
                           </div>
                           <div>
                             <h4 className="font-black text-white uppercase tracking-widest text-xs md:text-sm">{testimonialsData[activeTestimonial].name}</h4>
