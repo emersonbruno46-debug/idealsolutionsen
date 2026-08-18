@@ -341,13 +341,36 @@ const testimonialsData = [
   { name: "Daniel Reeves", role: "Owner, Apex Home Services", text: "I was skeptical about investing in a dedicated landing page when I already had a website. But the difference is real. The page they built for our Google Ads campaign converts at a much higher rate than anything we had before." }
 ];
 
+const processSteps = [
+  {
+    number: "01",
+    title: "STRATEGY",
+    desc: "We understand your offer, audience and conversion goal."
+  },
+  {
+    number: "02",
+    title: "COPY & STRUCTURE",
+    desc: "We build the messaging and page flow around one clear action."
+  },
+  {
+    number: "03",
+    title: "DESIGN & BUILD",
+    desc: "We turn the strategy into a premium, responsive landing page."
+  },
+  {
+    number: "04",
+    title: "LAUNCH",
+    desc: "Tracking, integrations, testing and go-live."
+  }
+];
+
 const PremiumLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const processScroll = useAutoScroll();
   // portfolioScroll removed — replaced by ProjectShowcase component
   const heroRef = useRef<HTMLDivElement>(null);
   const problemRef = useRef<HTMLDivElement>(null);
+  const processRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (!heroRef.current) return;
@@ -490,6 +513,123 @@ const PremiumLanding = () => {
       mm.revert();
     };
   }, { scope: problemRef });
+
+  useGSAP(() => {
+    if (!processRef.current) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      gsap.set(".process-progress-line", { scaleY: 1 });
+      gsap.set(".process-step-bullet", {
+        backgroundColor: "#FFDE21",
+        borderColor: "#FFDE21",
+        color: "#000000"
+      });
+      gsap.set(".process-step-content h3", { color: "#ffffff" });
+      gsap.set(".process-step-content p", { color: "rgba(255,255,255,0.7)" });
+      return;
+    }
+
+    const mm = gsap.matchMedia();
+
+    // Desktop Animation: Pinned timeline scroll sequence
+    mm.add("(min-width: 1024px)", () => {
+      const bullets = gsap.utils.toArray(".process-step-bullet");
+      const titles = gsap.utils.toArray(".process-step-content h3");
+      const descs = gsap.utils.toArray(".process-step-content p");
+
+      // Set initial desktop states (first is active, others are muted)
+      gsap.set(bullets, { backgroundColor: "#050505", borderColor: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.2)", scale: 1.0 });
+      gsap.set(titles, { color: "rgba(255,255,255,0.2)" });
+      gsap.set(descs, { color: "rgba(255,255,255,0.1)" });
+      
+      gsap.set(bullets[0], { backgroundColor: "#FFDE21", borderColor: "#FFDE21", color: "#000000", scale: 1.1 });
+      gsap.set(titles[0], { color: "#ffffff" });
+      gsap.set(descs[0], { color: "rgba(255,255,255,0.7)" });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: processRef.current,
+          start: "top top",
+          end: "+=150%",
+          scrub: 0.5,
+          pin: true,
+          anticipatePin: 1
+        }
+      });
+
+      // Animate progress line scale
+      tl.to(".process-progress-line", { scaleY: 1, ease: "none", duration: 3 });
+
+      // Step 1 -> Completed, Step 2 -> Active
+      tl.to(bullets[0], { backgroundColor: "#050505", borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.6)", scale: 1.0, duration: 0.3 }, 0.7)
+        .to(titles[0], { color: "rgba(255,255,255,0.6)", duration: 0.3 }, 0.7)
+        .to(descs[0], { color: "rgba(255,255,255,0.4)", duration: 0.3 }, 0.7)
+        .to(bullets[1], { backgroundColor: "#FFDE21", borderColor: "#FFDE21", color: "#000000", scale: 1.1, duration: 0.3 }, 1.0)
+        .to(titles[1], { color: "#ffffff", duration: 0.3 }, 1.0)
+        .to(descs[1], { color: "rgba(255,255,255,0.7)", duration: 0.3 }, 1.0);
+
+      // Step 2 -> Completed, Step 3 -> Active
+      tl.to(bullets[1], { backgroundColor: "#050505", borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.6)", scale: 1.0, duration: 0.3 }, 1.7)
+        .to(titles[1], { color: "rgba(255,255,255,0.6)", duration: 0.3 }, 1.7)
+        .to(descs[1], { color: "rgba(255,255,255,0.4)", duration: 0.3 }, 1.7)
+        .to(bullets[2], { backgroundColor: "#FFDE21", borderColor: "#FFDE21", color: "#000000", scale: 1.1, duration: 0.3 }, 2.0)
+        .to(titles[2], { color: "#ffffff", duration: 0.3 }, 2.0)
+        .to(descs[2], { color: "rgba(255,255,255,0.7)", duration: 0.3 }, 2.0);
+
+      // Step 3 -> Completed, Step 4 -> Active
+      tl.to(bullets[2], { backgroundColor: "#050505", borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.6)", scale: 1.0, duration: 0.3 }, 2.7)
+        .to(titles[2], { color: "rgba(255,255,255,0.6)", duration: 0.3 }, 2.7)
+        .to(descs[2], { color: "rgba(255,255,255,0.4)", duration: 0.3 }, 2.7)
+        .to(bullets[3], { backgroundColor: "#FFDE21", borderColor: "#FFDE21", color: "#000000", scale: 1.1, duration: 0.3 }, 3.0)
+        .to(titles[3], { color: "#ffffff", duration: 0.3 }, 3.0)
+        .to(descs[3], { color: "rgba(255,255,255,0.7)", duration: 0.3 }, 3.0);
+    });
+
+    // Mobile Animation: Normal scroll entry
+    mm.add("(max-width: 1023px)", () => {
+      const bullets = gsap.utils.toArray(".process-step-bullet");
+      const titles = gsap.utils.toArray(".process-step-content h3");
+      const descs = gsap.utils.toArray(".process-step-content p");
+
+      // Mobile style is fully visible, but with a reveal and progress line
+      gsap.set(bullets, { backgroundColor: "#050505", borderColor: "#FFDE21", color: "#FFDE21" });
+      gsap.set(titles, { color: "#ffffff" });
+      gsap.set(descs, { color: "rgba(255,255,255,0.6)" });
+
+      gsap.fromTo(".process-step",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.2,
+          scrollTrigger: {
+            trigger: processRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none"
+          }
+        }
+      );
+
+      gsap.fromTo(".process-progress-line",
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".process-timeline-container",
+            start: "top 70%",
+            end: "bottom 70%",
+            scrub: 0.5
+          }
+        }
+      );
+    });
+
+    return () => {
+      mm.revert();
+    };
+  }, { scope: processRef });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -831,39 +971,51 @@ const PremiumLanding = () => {
         </section>
 
         {/* Process Section */}
-        <section id="process" className="py-8 lg:py-20 relative z-10">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="mb-12 text-center lg:text-left">
-              <span className="inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-6">Our Workflow</span>
-              <h2 className="text-3xl md:text-7xl font-black uppercase tracking-tighter text-white">Our <span className="text-[#FFDE21]">Process</span></h2>
-            </div>
-            
-            <div ref={processScroll.ref} className="flex overflow-x-auto hide-scrollbar gap-6 pb-8 -mx-6 px-6 md:grid md:grid-cols-3 md:pb-0 md:mx-0 md:px-0">
-              {[
-                {
-                  step: "01",
-                  title: "Strategy & Discovery",
-                  desc: "We understand your offer, audience and conversion goal — so the page is built around what actually drives action."
-                },
-                {
-                  step: "02",
-                  title: "Copy & Design",
-                  desc: "We build the messaging, page structure and visual design around one clear action. Every word and every section earns its place."
-                },
-                {
-                  step: "03",
-                  title: "Build & Launch",
-                  desc: "We develop, integrate and test your landing page. Tracking, forms, pixels and go-live — all handled before the first visitor arrives."
-                }
-              ].map((s, i) => (
-                <div key={i} className="shrink-0 w-[85vw] md:w-auto h-full">
-                  <DoubleBezelCard delay={0.2 * i} bentoClass="h-full">
-                    <div className="text-6xl font-black text-white/5 mb-8 tracking-tighter">{s.step}</div>
-                    <h3 className="text-2xl md:text-3xl font-black mb-4 uppercase tracking-tighter">{s.title}</h3>
-                    <p className="text-white/50 text-base leading-relaxed">{s.desc}</p>
-                  </DoubleBezelCard>
+        <section ref={processRef} id="process" className="py-20 lg:py-0 min-h-screen lg:h-screen lg:flex lg:items-center relative z-10 bg-[#050505] overflow-hidden">
+          <div className="container mx-auto px-4 lg:px-8 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center w-full">
+              
+              {/* Left Column: Heading */}
+              <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
+                <span className="text-[#FFDE21] text-xs font-black uppercase tracking-[0.2em] block process-eyebrow">
+                  OUR PROCESS
+                </span>
+                <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-white process-heading">
+                  FROM IDEA<br />
+                  TO LIVE PAGE.
+                </h2>
+              </div>
+
+              {/* Right Column: Editorial Timeline */}
+              <div className="lg:col-span-7 relative pl-8 lg:pl-16 process-timeline-container text-left">
+                {/* Progress line */}
+                <div className="absolute left-[16px] lg:left-[24px] top-[16px] lg:top-[24px] bottom-[16px] lg:bottom-[24px] w-[2px] bg-white/10 rounded-full">
+                  <div className="process-progress-line absolute top-0 left-0 w-full bg-[#FFDE21] origin-top scale-y-0 h-full rounded-full" />
                 </div>
-              ))}
+
+                {/* Steps */}
+                <div className="space-y-12 lg:space-y-16">
+                  {processSteps.map((step, idx) => (
+                    <div key={idx} className="process-step relative flex gap-6 lg:gap-10 items-start">
+                      {/* Bullet */}
+                      <div className="process-step-bullet flex-shrink-0 w-8 h-8 lg:w-12 lg:h-12 rounded-full border bg-[#050505] border-white/10 flex items-center justify-center text-xs lg:text-sm font-bold z-10 text-white/40 transition-colors duration-500">
+                        {step.number}
+                      </div>
+
+                      {/* Content */}
+                      <div className="process-step-content flex-grow pt-1 lg:pt-2 space-y-2">
+                        <h3 className="text-xl lg:text-3xl font-black uppercase tracking-tighter text-white/30 transition-colors duration-500">
+                          {step.title}
+                        </h3>
+                        <p className="text-white/20 text-sm lg:text-lg leading-relaxed font-medium transition-colors duration-500 max-w-xl">
+                          {step.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
