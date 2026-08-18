@@ -161,6 +161,176 @@ const DoubleBezelCard = ({ children, className = "", delay = 0, bentoClass = "" 
   </motion.div>
 );
 
+// Grid Pattern para fundo do bento card
+function GridPattern({
+  width = 24,
+  height = 24,
+  x = "-12",
+  y = "4",
+  squares,
+  className,
+  ...props
+}: React.ComponentProps<"svg"> & { width?: number; height?: number; x?: string; y?: string; squares?: number[][] }) {
+  const patternId = React.useId();
+
+  return (
+    <svg aria-hidden="true" className={className} {...props}>
+      <defs>
+        <pattern id={patternId} width={width} height={height} patternUnits="userSpaceOnUse" x={x} y={y}>
+          <path d={`M.5 ${height}V.5H${width}`} fill="none" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" strokeWidth={0} fill={`url(#${patternId})`} />
+      {squares && (
+        <svg x={x} y={y} className="overflow-visible animate-pulse duration-[3000ms]">
+          {squares.map(([sqX, sqY], index) => (
+            <rect strokeWidth="0" key={index} width={width + 1} height={height + 1} x={sqX * width} y={sqY * height} />
+          ))}
+        </svg>
+      )}
+    </svg>
+  );
+}
+
+// Bento Card Customizado
+const BentoCard = ({ 
+  children, 
+  delay = 0, 
+  bentoClass = "", 
+  className = "",
+  squares 
+}: { 
+  children: React.ReactNode; 
+  delay?: number; 
+  bentoClass?: string; 
+  className?: string;
+  squares?: number[][] ;
+}) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 40, filter: "blur(5px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 1.0, delay, ease: premiumEasing }}
+      className={`p-1.5 rounded-[2rem] bg-white/5 border border-white/10 ring-1 ring-black/5 group hover:scale-[1.01] transition-transform duration-500 ${bentoClass}`}
+    >
+      <div className={`relative overflow-hidden h-full rounded-[calc(2rem-0.375rem)] bg-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] p-6 md:p-8 ${className}`}>
+        {/* Grid Pattern Background com Máscara Radial */}
+        <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] opacity-40">
+          <GridPattern
+            width={24}
+            height={24}
+            x="-12"
+            y="4"
+            squares={squares}
+            className="fill-[#FFDE21]/10 stroke-white/5 absolute inset-0 h-full w-full mix-blend-overlay"
+          />
+        </div>
+        <div className="relative z-10 h-full flex flex-col justify-between">
+          {children}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Mini componentes decorativos para os Bento Cards
+const StrategyFlow = () => (
+  <div className="flex items-center justify-between gap-2 bg-white/[0.02] border border-white/5 p-4 rounded-2xl w-full max-w-md mx-auto my-4 overflow-x-auto text-[10px] md:text-xs font-mono select-none">
+    <div className="flex flex-col items-center gap-1.5 min-w-[60px]">
+      <span className="text-white/40 text-[8px]">STEP 01</span>
+      <div className="px-2 py-1 bg-[#FFDE21]/15 text-[#FFDE21] border border-[#FFDE21]/30 rounded-lg font-bold">Paid Ad</div>
+    </div>
+    <span className="text-white/20 shrink-0">→</span>
+    <div className="flex flex-col items-center gap-1.5 min-w-[60px]">
+      <span className="text-white/40 text-[8px]">STEP 02</span>
+      <div className="px-2 py-1 bg-white/5 text-white/80 border border-white/10 rounded-lg">Message</div>
+    </div>
+    <span className="text-white/20 shrink-0">→</span>
+    <div className="flex flex-col items-center gap-1.5 min-w-[80px]">
+      <span className="text-white/40 text-[8px]">STEP 03</span>
+      <div className="px-2 py-1 bg-white/5 text-white/80 border border-white/10 rounded-lg">Landing Page</div>
+    </div>
+    <span className="text-[#FFDE21]/50 shrink-0 animate-pulse">→</span>
+    <div className="flex flex-col items-center gap-1.5 min-w-[80px]">
+      <span className="text-[#FFDE21] text-[8px]">GOAL</span>
+      <div className="px-2 py-1 bg-[#FFDE21] text-black rounded-lg font-bold shadow-[0_0_15px_rgba(255,222,33,0.3)]">Conversion</div>
+    </div>
+  </div>
+);
+
+const CopyVisual = () => (
+  <div className="bg-white/[0.02] border border-white/5 p-4 rounded-2xl w-full max-w-sm mx-auto my-4 text-left font-sans select-none">
+    <div className="w-12 h-1.5 bg-white/10 rounded-full mb-3" />
+    <div className="text-sm font-bold text-white mb-2 leading-snug">
+      We build <span className="text-[#FFDE21] border-b border-[#FFDE21] pb-0.5">high-converting</span> landing pages.
+    </div>
+    <div className="space-y-1.5">
+      <div className="w-full h-1 bg-white/5 rounded-full" />
+      <div className="w-[85%] h-1 bg-white/5 rounded-full" />
+    </div>
+  </div>
+);
+
+const DesignVisual = () => (
+  <div className="relative h-28 w-full max-w-xs mx-auto my-4 bg-white/[0.01] border border-white/5 rounded-2xl overflow-hidden flex items-center justify-center">
+    <div className="absolute top-4 left-6 w-32 h-20 bg-white/5 border border-white/10 rounded-lg shadow-2xl opacity-60 transform -rotate-6 transition-transform group-hover:rotate-0 duration-500" />
+    <div className="absolute top-8 right-6 w-16 h-16 bg-[#FFDE21]/10 border border-[#FFDE21]/20 rounded-full flex items-center justify-center transform rotate-12 transition-transform group-hover:-translate-y-1 duration-500">
+      <span className="text-[#FFDE21] text-xl font-bold">A</span>
+    </div>
+    <div className="absolute bottom-4 left-12 w-36 h-12 bg-black border border-white/20 rounded-xl p-2.5 flex items-center gap-2 shadow-2xl transition-transform group-hover:translate-y-[-2px] duration-500">
+      <div className="w-6 h-6 bg-[#FFDE21] rounded-lg shrink-0 animate-pulse" />
+      <div className="space-y-1 w-full">
+        <div className="w-16 h-1.5 bg-white/30 rounded-full" />
+        <div className="w-10 h-1 bg-white/15 rounded-full" />
+      </div>
+    </div>
+  </div>
+);
+
+const DevVisual = () => (
+  <div className="flex items-end justify-center gap-3 h-24 w-full max-w-xs mx-auto my-4 select-none">
+    <div className="w-24 h-16 bg-white/[0.02] border border-white/10 rounded-t-lg p-1.5 flex flex-col gap-1 transition-all group-hover:border-white/20 duration-500">
+      <div className="flex gap-0.5">
+        <div className="w-1 h-1 bg-white/20 rounded-full" />
+        <div className="w-1 h-1 bg-white/20 rounded-full" />
+      </div>
+      <div className="w-full h-full bg-white/5 rounded" />
+    </div>
+    <div className="w-12 h-20 bg-white/[0.02] border border-white/10 rounded-lg p-1 flex flex-col gap-1 transition-all group-hover:border-white/20 duration-500">
+      <div className="w-full h-full bg-white/5 rounded" />
+    </div>
+    <div className="w-8 h-16 bg-[#FFDE21]/5 border border-[#FFDE21]/20 rounded-md p-0.5 flex flex-col gap-0.5 transition-all group-hover:border-[#FFDE21]/40 duration-500">
+      <div className="w-full h-full bg-[#FFDE21]/10 rounded-sm" />
+    </div>
+  </div>
+);
+
+const IntegrationsVisual = () => (
+  <div className="flex items-center justify-center gap-3 h-20 w-full max-w-xs mx-auto my-2 select-none relative">
+    <div className="w-10 h-10 bg-[#FFDE21]/15 border border-[#FFDE21]/30 rounded-xl flex items-center justify-center text-[#FFDE21] z-10 animate-pulse">
+      <span className="text-[10px] font-bold">API</span>
+    </div>
+    <div className="w-8 h-8 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-white/50 z-10 transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-500">
+      <span className="text-[9px] font-bold">PX</span>
+    </div>
+    <div className="w-8 h-8 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-white/50 z-10 transform translate-x-1 group-hover:translate-x-0 transition-transform duration-500">
+      <span className="text-[9px] font-bold">CRM</span>
+    </div>
+    <div className="absolute w-24 h-0.5 bg-white/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" />
+  </div>
+);
+
+const LaunchVisual = () => (
+  <div className="flex items-center justify-center gap-3 bg-[#FFDE21]/5 border border-[#FFDE21]/10 px-4 py-3 rounded-xl w-full max-w-[160px] mx-auto my-4 font-mono text-[10px] select-none">
+    <div className="relative flex h-2 w-2">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FFDE21] opacity-75"></span>
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FFDE21]"></span>
+    </div>
+    <span className="text-[#FFDE21] font-bold tracking-widest uppercase">System Live</span>
+  </div>
+);
+
 const testimonialsData = [
   { name: "Sarah Mitchell", role: "CEO, Mitchell Aesthetics Clinic", text: "We were running Meta ads and getting clicks but almost no bookings. After Ideal Landing Co. redesigned our landing page around conversions, our cost per booked consultation dropped significantly within the first two weeks." },
   { name: "James Carroll", role: "Founder, Carroll Performance Marketing", text: "As a paid media agency we were always looking for a reliable landing page partner. Ideal Landing Co. delivers fast, the quality is genuinely premium, and our clients notice the difference immediately. They've become our go-to white-label partner." },
@@ -430,46 +600,99 @@ const PremiumLanding = () => {
               <h2 className="text-3xl md:text-7xl font-black uppercase tracking-tighter">One page. One goal. <br/><span className="text-[#FFDE21]">More conversions.</span></h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(250px,auto)]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
               
-              {/* Bento Card 1 - Large */}
-              <DoubleBezelCard delay={0.1} bentoClass="md:col-span-8 md:row-span-2 group">
-                <div className="flex flex-col h-full justify-between">
-                  <div className="w-16 h-16 bg-[#FFDE21]/10 rounded-[1.2rem] flex items-center justify-center group-hover:bg-[#FFDE21] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
-                    <Palette className="w-8 h-8 text-[#FFDE21] group-hover:text-black transition-colors" />
+              {/* Card 1 - Conversion Strategy (Largest) */}
+              <BentoCard delay={0.1} bentoClass="md:col-span-8" squares={[[1, 0], [4, 1], [7, 2]]}>
+                <div className="flex flex-col md:flex-row gap-6 items-center justify-between h-full">
+                  <div className="flex flex-col justify-between h-full max-w-md">
+                    <div className="w-12 h-12 bg-[#FFDE21]/10 rounded-xl flex items-center justify-center text-[#FFDE21] mb-6">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-black mb-3 uppercase tracking-tighter">Conversion Strategy</h3>
+                      <p className="text-white/50 text-sm leading-relaxed">Every section is designed around one clear action. We align user behavior with your campaign goals to eliminate friction points.</p>
+                    </div>
                   </div>
-                  <div className="mt-12">
-                    <h3 className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter">Conversion Strategy & Copy</h3>
-                    <p className="text-white/50 text-lg max-w-md">Every section is designed around one clear action. Clear messaging that explains what you offer, who it's for and why they should care — written to convert, not just to look good.</p>
+                  <div className="w-full md:w-auto shrink-0">
+                    <StrategyFlow />
                   </div>
                 </div>
-              </DoubleBezelCard>
+              </BentoCard>
 
-              {/* Bento Card 2 - Small */}
-              <DoubleBezelCard delay={0.2} bentoClass="md:col-span-4 md:row-span-1 group">
-                <div className="flex flex-col h-full justify-between">
-                  <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                    <Share2 className="w-5 h-5 text-white/70 group-hover:text-[#FFDE21]" />
+              {/* Card 2 - Conversion Copy (Medium) */}
+              <BentoCard delay={0.2} bentoClass="md:col-span-4" squares={[[2, 1], [3, 0]]}>
+                <div className="flex flex-col justify-between h-full">
+                  <div className="w-12 h-12 bg-[#FFDE21]/10 rounded-xl flex items-center justify-center text-[#FFDE21] mb-6">
+                    <Gem className="w-6 h-6" />
                   </div>
-                  <div className="mt-8">
-                    <h3 className="text-xl font-black mb-2 uppercase tracking-tight">Custom Design & Development</h3>
-                    <p className="text-white/40 text-sm">No generic templates. Your page is designed around your brand, offer and campaign goal — responsive, fast and ready to launch.</p>
+                  <div>
+                    <h3 className="text-xl font-black mb-2 uppercase tracking-tight">Conversion Copy</h3>
+                    <p className="text-white/50 text-sm leading-relaxed mb-4">Clear messaging that explains what you offer, who it's for and why they should care.</p>
+                    <CopyVisual />
                   </div>
                 </div>
-              </DoubleBezelCard>
+              </BentoCard>
 
-              {/* Bento Card 3 - Small */}
-              <DoubleBezelCard delay={0.3} bentoClass="md:col-span-4 md:row-span-1 group">
-                <div className="flex flex-col h-full justify-between">
-                  <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                    <Globe className="w-5 h-5 text-white/70 group-hover:text-[#FFDE21]" />
+              {/* Card 3 - Custom Design (Large) */}
+              <BentoCard delay={0.3} bentoClass="md:col-span-7" squares={[[0, 2], [3, 1], [5, 0]]}>
+                <div className="flex flex-col md:flex-row gap-6 items-center justify-between h-full">
+                  <div className="flex flex-col justify-between h-full max-w-xs">
+                    <div className="w-12 h-12 bg-[#FFDE21]/10 rounded-xl flex items-center justify-center text-[#FFDE21] mb-6">
+                      <Palette className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl md:text-2xl font-black mb-3 uppercase tracking-tight">Custom Design</h3>
+                      <p className="text-white/50 text-sm leading-relaxed">No generic templates. Your page is designed around your brand guidelines and your specific conversion goals.</p>
+                    </div>
                   </div>
-                  <div className="mt-8">
-                    <h3 className="text-xl font-black mb-2 uppercase tracking-tight">Integrations & Launch Support</h3>
-                    <p className="text-white/40 text-sm">Forms, calendars, analytics, pixels and your existing tools. We make sure everything works before traffic hits the page.</p>
+                  <div className="w-full md:w-auto shrink-0">
+                    <DesignVisual />
                   </div>
                 </div>
-              </DoubleBezelCard>
+              </BentoCard>
+
+              {/* Card 4 - Development (Medium) */}
+              <BentoCard delay={0.4} bentoClass="md:col-span-5" squares={[[1, 1], [4, 2]]}>
+                <div className="flex flex-col justify-between h-full">
+                  <div className="w-12 h-12 bg-[#FFDE21]/10 rounded-xl flex items-center justify-center text-[#FFDE21] mb-6">
+                    <Globe className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black mb-2 uppercase tracking-tight">Development</h3>
+                    <p className="text-white/50 text-sm leading-relaxed">Responsive, lightning-fast and ready to launch. Clean code optimized for maximum conversion performance.</p>
+                    <DevVisual />
+                  </div>
+                </div>
+              </BentoCard>
+
+              {/* Card 5 - Integrations (Smaller) */}
+              <BentoCard delay={0.5} bentoClass="md:col-span-6" squares={[[2, 0], [4, 1]]}>
+                <div className="flex flex-col justify-between h-full">
+                  <div className="w-12 h-12 bg-[#FFDE21]/10 rounded-xl flex items-center justify-center text-[#FFDE21] mb-6">
+                    <Share2 className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black mb-2 uppercase tracking-tight">Integrations</h3>
+                    <p className="text-white/50 text-sm leading-relaxed mb-4">Forms, calendars, analytics, tracking pixels and your existing CRM tools seamlessly connected.</p>
+                    <IntegrationsVisual />
+                  </div>
+                </div>
+              </BentoCard>
+
+              {/* Card 6 - Launch Support (Smaller) */}
+              <BentoCard delay={0.6} bentoClass="md:col-span-6" squares={[[1, 2], [3, 0]]}>
+                <div className="flex flex-col justify-between h-full">
+                  <div className="w-12 h-12 bg-[#FFDE21]/10 rounded-xl flex items-center justify-center text-[#FFDE21] mb-6">
+                    <Star className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black mb-2 uppercase tracking-tight">Launch Support</h3>
+                    <p className="text-white/50 text-sm leading-relaxed mb-4">We perform rigorous QA and make sure everything is technically sound before paid traffic hits the page.</p>
+                    <LaunchVisual />
+                  </div>
+                </div>
+              </BentoCard>
 
             </div>
           </div>
