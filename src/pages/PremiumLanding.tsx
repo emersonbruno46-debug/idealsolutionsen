@@ -8,6 +8,7 @@ import {
   Instagram, Linkedin, Twitter, Menu, X
 } from "lucide-react";
 import { LogoPremium } from "@/components/premium/LogoPremium";
+import { ProjectShowcase } from "@/components/premium/ProjectShowcase";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -344,7 +345,7 @@ const PremiumLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const processScroll = useAutoScroll();
-  const portfolioScroll = useAutoScroll();
+  // portfolioScroll removed — replaced by ProjectShowcase component
   const heroRef = useRef<HTMLDivElement>(null);
   const problemRef = useRef<HTMLDivElement>(null);
 
@@ -867,70 +868,8 @@ const PremiumLanding = () => {
           </div>
         </section>
 
-        {/* Portfolio Section */}
-        <section id="work" className="py-12 lg:py-32 relative z-10">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="text-center mb-20">
-              <span className="inline-block px-3 py-1 bg-white/5 text-white/50 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">Selected Work</span>
-              <h2 className="text-4xl sm:text-5xl md:text-7xl font-black mb-6 text-white uppercase tracking-tighter">Built to look good. <br className="md:hidden"/><span className="text-[#FFDE21]">Designed to perform.</span></h2>
-              <p className="text-white/50 text-lg md:text-xl max-w-2xl mx-auto font-medium">Pages designed around business goals, not just aesthetics.</p>
-            </div>
-  
-            <div ref={portfolioScroll.ref} className="flex overflow-x-auto hide-scrollbar gap-8 pb-8 -mx-6 px-6 md:grid md:grid-cols-3 md:pb-0 md:mx-0 md:px-0">
-              {[
-                { 
-                  label: "Professional Services", 
-                  title: "Authority & Positioning", 
-                  tag: "WELIS",
-                  img: "/portfolio-welis.png",
-                  desc: "Visual positioning and authority for a specialist engineer — landing page and content strategy."
-                },
-                { 
-                  label: "Food & Hospitality", 
-                  title: "Brand & Campaign Page", 
-                  tag: "CHOP'S",
-                  img: "/portfolio-chops.jpg",
-                  desc: "Impactful and memorable brand built to attract a young urban audience in the food segment."
-                },
-                { 
-                  label: "Beauty & Wellness", 
-                  title: "Booking-Focused Design", 
-                  tag: "GABI",
-                  img: "/portfolio-gabi.png",
-                  desc: "Elegant and memorable brand focused on a premium female audience in the beauty market."
-                }
-              ].map((p, i) => (
-                <div key={i} className="shrink-0 w-[85vw] md:w-auto h-full">
-                <div
-                  className="group flex flex-col rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] cursor-pointer h-full transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] md:hover:-translate-y-2.5"
-                >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-white/5">
-                    <img 
-                      src={p.img} 
-                      alt={p.title} 
-                      className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-110"
-                      draggable={false}
-                    />
-                  </div>
-                  
-                  <div className="p-8 flex flex-col flex-grow justify-between">
-                    <div>
-                      <span className="inline-block px-3 py-1 bg-[#FFDE21] text-black rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
-                        {p.tag}
-                      </span>
-                      <p className="text-white/40 text-xs font-black uppercase tracking-[0.2em] mb-1">{p.label}</p>
-                      <h4 className="text-2xl font-black text-white uppercase tracking-tight mb-3">{p.title}</h4>
-                    </div>
-                    <p className="text-white/60 text-sm leading-relaxed font-medium mt-2">
-                      {p.desc}
-                    </p>
-                  </div>
-                </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Portfolio Section — ProjectShowcase */}
+        <ProjectShowcase />
 
         {/* Cinematic Testimonial Split */}
         <section id="testimonials" className="py-12 lg:py-32 relative">
