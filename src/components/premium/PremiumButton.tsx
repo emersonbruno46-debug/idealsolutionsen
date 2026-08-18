@@ -28,7 +28,7 @@ export const PremiumButton = ({
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={`
-        relative px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 transition-all duration-300
+        relative px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]
         ${variants[variant]}
         ${className}
       `}

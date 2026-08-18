@@ -8,6 +8,7 @@ export const LogoPremium = ({ variant = "full" }: { variant?: "full" | "icon" })
       <div className="relative group">
         {variant === "icon" && (
           <motion.div
+            aria-hidden="true"
             animate={{ 
               scale: [1, 1.1, 1],
               opacity: [0.2, 0.4, 0.2]
@@ -18,7 +19,7 @@ export const LogoPremium = ({ variant = "full" }: { variant?: "full" | "icon" })
         )}
         <motion.img 
           src={logoSrc} 
-          alt="Ideal Solutions Logo" 
+          alt="Ideal Landing Co. Logo" 
           className={variant === "full" ? "h-12 w-auto relative z-10" : "h-10 w-auto relative z-10"}
           whileHover={{ scale: 1.05 }}
         />

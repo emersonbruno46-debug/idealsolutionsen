@@ -142,7 +142,7 @@ const handleContact = () => {
 const MagneticCTA = ({ text, className = "", primary = true, onClick }: { text: string, className?: string, primary?: boolean, onClick?: (e: React.MouseEvent) => void }) => (
   <button 
     onClick={onClick || handleContact}
-    className={`group relative pl-8 pr-[4.5rem] py-4 rounded-full font-bold tracking-wide active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] ${
+    className={`group relative pl-8 pr-[4.5rem] py-4 rounded-full font-bold tracking-wide active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${
       primary 
         ? "bg-[#FFDE21] text-black shadow-[0_0_30px_rgba(255,222,33,0.3)] hover:shadow-[0_0_50px_rgba(255,222,33,0.5)]" 
         : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
@@ -868,16 +868,18 @@ const PremiumLanding = () => {
       <div className="fixed inset-0 noise-bg z-[2] opacity-30 pointer-events-none mix-blend-overlay" />
 
       {/* Fluid Island Nav */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] w-[90%] max-w-5xl rounded-full border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl p-2 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
+      <nav aria-label="Main Navigation" className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] w-[90%] max-w-5xl rounded-full border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl p-2 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
         <div className="flex items-center justify-between px-6 h-14">
-          <LogoPremium />
+          <a href="#hero" aria-label="Ideal Landing Co. Home" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded-lg">
+            <LogoPremium />
+          </a>
           
           <div className="hidden md:flex items-center gap-8">
             {["Services", "Work", "Process", "Testimonials"].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase()}`} 
-                className="text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-[#FFDE21] transition-colors"
+                className="text-xs font-bold uppercase tracking-[0.2em] text-white/70 hover:text-[#FFDE21] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1.5 py-0.5"
               >
                 {item}
               </a>
@@ -885,13 +887,16 @@ const PremiumLanding = () => {
           </div>
           
           <div className="hidden md:block">
-            <button onClick={handleAuditScroll} className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-[#FFDE21] hover:text-black border border-white/10 text-xs font-bold uppercase tracking-widest transition-all duration-500">
+            <button onClick={handleAuditScroll} className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-[#FFDE21] hover:text-black border border-white/10 text-xs font-bold uppercase tracking-widest transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]">
               Get a Free Audit
             </button>
           </div>
 
           <button 
-            className="md:hidden relative w-10 h-10 flex items-center justify-center text-white"
+            type="button"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            className="md:hidden relative w-10 h-10 flex items-center justify-center text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded-lg"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <span className={`absolute h-[2px] w-6 bg-current transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isMenuOpen ? 'rotate-45' : '-translate-y-1.5'}`} />
@@ -1499,7 +1504,7 @@ const PremiumLanding = () => {
 
                       <div className="space-y-4">
                         <div className="space-y-2">
-                          <label htmlFor="landingPageUrl" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                          <label htmlFor="landingPageUrl" className="text-xs font-bold uppercase tracking-wider text-white/70 block">
                             Website / Landing Page URL
                           </label>
                           <input
@@ -1508,6 +1513,8 @@ const PremiumLanding = () => {
                             disabled={!formData.hasLandingPage}
                             placeholder="https://yourwebsite.com"
                             value={formData.landingPageUrl}
+                            aria-invalid={!!urlError}
+                            aria-describedby={urlError ? "url-error" : undefined}
                             onChange={(e) => {
                               setFormData(prev => ({ ...prev, landingPageUrl: e.target.value }));
                               setUrlError("");
@@ -1518,7 +1525,7 @@ const PremiumLanding = () => {
                                 handleNext();
                               }
                             }}
-                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/20 focus:outline-none transition-all duration-300 font-medium ${
+                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/40 focus:outline-none transition-all duration-300 font-medium ${
                               urlError 
                                 ? "border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
                                 : !formData.hasLandingPage
@@ -1527,7 +1534,7 @@ const PremiumLanding = () => {
                             }`}
                           />
                           {urlError && (
-                            <p className="text-red-500 text-xs font-semibold mt-1">
+                            <p id="url-error" role="alert" className="text-red-400 text-xs font-semibold mt-1">
                               {urlError}
                             </p>
                           )}
@@ -1536,6 +1543,8 @@ const PremiumLanding = () => {
                         {/* Checkbox option */}
                         <button
                           type="button"
+                          role="checkbox"
+                          aria-checked={!formData.hasLandingPage}
                           onClick={() => {
                             setFormData(prev => ({
                               ...prev,
@@ -1544,10 +1553,10 @@ const PremiumLanding = () => {
                             }));
                             setUrlError("");
                           }}
-                          className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 ${
+                          className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] ${
                             !formData.hasLandingPage
                               ? "border-[#FFDE21] bg-[#FFDE21]/5 text-white"
-                              : "border-white/10 bg-transparent text-white/50 hover:border-white/20 hover:text-white"
+                              : "border-white/10 bg-transparent text-white/75 hover:border-white/20 hover:text-white"
                           }`}
                         >
                           <span className="text-xs sm:text-sm font-semibold">I don't have a landing page yet</span>
@@ -1567,7 +1576,7 @@ const PremiumLanding = () => {
                       <button
                         type="button"
                         onClick={handleNext}
-                        className="w-full bg-[#FFDE21] text-black font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                        className="w-full bg-[#FFDE21] text-black font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
                       >
                         <span>CONTINUE</span>
                         <span>→</span>
@@ -1594,18 +1603,20 @@ const PremiumLanding = () => {
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div role="radiogroup" aria-label="Primary conversion goal" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {["Leads", "Booked Calls", "Sales", "Purchases", "Other"].map((opt) => (
                           <button
                             key={opt}
                             type="button"
+                            role="radio"
+                            aria-checked={formData.primaryGoal === opt}
                             onClick={() => {
                               setFormData(prev => ({ ...prev, primaryGoal: opt }));
                             }}
-                            className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 ${
+                            className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] ${
                               formData.primaryGoal === opt
                                 ? "border-[#FFDE21] bg-[#FFDE21]/5 text-white shadow-[0_0_15px_rgba(255,222,33,0.1)]"
-                                : "border-white/10 bg-transparent text-white/50 hover:border-white/20 hover:text-white"
+                                : "border-white/10 bg-transparent text-white/75 hover:border-white/20 hover:text-white"
                             }`}
                           >
                             <span className="text-xs sm:text-sm font-semibold">{opt}</span>
@@ -1625,7 +1636,7 @@ const PremiumLanding = () => {
                         <button
                           type="button"
                           onClick={handleBack}
-                          className="w-full sm:w-1/3 bg-transparent border border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-full transition-all duration-300"
+                          className="w-full sm:w-1/3 bg-transparent border border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21]"
                         >
                           ← BACK
                         </button>
@@ -1633,10 +1644,10 @@ const PremiumLanding = () => {
                           type="button"
                           onClick={handleNext}
                           disabled={!formData.primaryGoal}
-                          className={`w-full sm:w-2/3 font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ${
+                          className={`w-full sm:w-2/3 font-bold uppercase tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${
                             formData.primaryGoal 
                               ? "bg-[#FFDE21] text-black" 
-                              : "bg-white/5 text-white/20 border border-white/5 cursor-not-allowed"
+                              : "bg-white/5 text-white/40 border border-white/5 cursor-not-allowed"
                           }`}
                         >
                           <span>CONTINUE</span>
@@ -1660,12 +1671,12 @@ const PremiumLanding = () => {
                         <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
                           Where does most of your traffic come from?
                         </h3>
-                        <p className="text-white/50 text-xs sm:text-sm font-medium">
+                        <p className="text-white/70 text-xs sm:text-sm font-medium">
                           Choose the main source currently sending visitors to your business.
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div role="radiogroup" aria-label="Traffic source" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {[
                           "Google Ads", "Meta Ads", "Organic Search", 
                           "Social Media", "Not running traffic yet", "Other"
@@ -1673,13 +1684,15 @@ const PremiumLanding = () => {
                           <button
                             key={opt}
                             type="button"
+                            role="radio"
+                            aria-checked={formData.trafficSource === opt}
                             onClick={() => {
                               setFormData(prev => ({ ...prev, trafficSource: opt }));
                             }}
-                            className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 ${
+                            className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] ${
                               formData.trafficSource === opt
                                 ? "border-[#FFDE21] bg-[#FFDE21]/5 text-white shadow-[0_0_15px_rgba(255,222,33,0.1)]"
-                                : "border-white/10 bg-transparent text-white/50 hover:border-white/20 hover:text-white"
+                                : "border-white/10 bg-transparent text-white/75 hover:border-white/20 hover:text-white"
                             }`}
                           >
                             <span className="text-xs sm:text-sm font-semibold">{opt}</span>
@@ -1743,7 +1756,7 @@ const PremiumLanding = () => {
                         
                         {/* Name field */}
                         <div className="space-y-2">
-                          <label htmlFor="clientName" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                          <label htmlFor="clientName" className="text-xs font-bold uppercase tracking-wider text-white/70 block">
                             Name
                           </label>
                           <input
@@ -1751,6 +1764,8 @@ const PremiumLanding = () => {
                             id="clientName"
                             placeholder="John Smith"
                             value={formData.name}
+                            aria-invalid={!!nameError}
+                            aria-describedby={nameError ? "name-error" : undefined}
                             onChange={(e) => {
                               setFormData(prev => ({ ...prev, name: e.target.value }));
                               setNameError("");
@@ -1761,12 +1776,12 @@ const PremiumLanding = () => {
                                 handleNext();
                               }
                             }}
-                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/20 focus:outline-none transition-all duration-300 font-medium ${
-                              nameError ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-[#FFDE21]"
+                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-[#FFDE21] focus:ring-1 focus:ring-[#FFDE21] transition-all duration-300 font-medium ${
+                              nameError ? "border-red-500/80 focus:border-red-500" : "border-white/10"
                             }`}
                           />
                           {nameError && (
-                            <p className="text-red-500 text-xs font-semibold mt-1">
+                            <p id="name-error" role="alert" className="text-red-400 text-xs font-semibold mt-1">
                               {nameError}
                             </p>
                           )}
@@ -1774,7 +1789,7 @@ const PremiumLanding = () => {
 
                         {/* Company field */}
                         <div className="space-y-2">
-                          <label htmlFor="companyName" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
+                          <label htmlFor="companyName" className="text-xs font-bold uppercase tracking-wider text-white/70 block">
                             Company / Business Name
                           </label>
                           <input
@@ -1782,6 +1797,8 @@ const PremiumLanding = () => {
                             id="companyName"
                             placeholder="Smith Dental"
                             value={formData.company}
+                            aria-invalid={!!companyError}
+                            aria-describedby={companyError ? "company-error" : undefined}
                             onChange={(e) => {
                               setFormData(prev => ({ ...prev, company: e.target.value }));
                               setCompanyError("");
@@ -1792,12 +1809,12 @@ const PremiumLanding = () => {
                                 handleNext();
                               }
                             }}
-                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/20 focus:outline-none transition-all duration-300 font-medium ${
-                              companyError ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-[#FFDE21]"
+                            className={`w-full h-14 px-4 bg-white/5 border rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-[#FFDE21] focus:ring-1 focus:ring-[#FFDE21] transition-all duration-300 font-medium ${
+                              companyError ? "border-red-500/80 focus:border-red-500" : "border-white/10"
                             }`}
                           />
                           {companyError && (
-                            <p className="text-red-500 text-xs font-semibold mt-1">
+                            <p id="company-error" role="alert" className="text-red-400 text-xs font-semibold mt-1">
                               {companyError}
                             </p>
                           )}
@@ -1805,8 +1822,8 @@ const PremiumLanding = () => {
 
                         {/* Notes field */}
                         <div className="space-y-2">
-                          <label htmlFor="auditNotes" className="text-xs font-bold uppercase tracking-wider text-white/40 block">
-                            Anything we should know? <span className="text-white/20 lowercase font-medium">(optional)</span>
+                          <label htmlFor="auditNotes" className="text-xs font-bold uppercase tracking-wider text-white/70 block">
+                            Anything we should know? <span className="text-white/45 lowercase font-medium">(optional)</span>
                           </label>
                           <textarea
                             id="auditNotes"
@@ -1814,7 +1831,7 @@ const PremiumLanding = () => {
                             value={formData.notes}
                             onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
                             rows={3}
-                            className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/20 focus:outline-none focus:border-[#FFDE21] transition-all duration-300 font-medium resize-y"
+                            className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-[#FFDE21] focus:ring-1 focus:ring-[#FFDE21] transition-all duration-300 font-medium resize-y"
                           />
                         </div>
 
@@ -2040,7 +2057,7 @@ I'd like to know what could be improved to increase conversions.`;
                       }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-6 text-white/50 text-xs sm:text-sm leading-relaxed max-w-2xl font-medium">
+                      <div className="pb-6 text-white/75 text-xs sm:text-sm leading-relaxed max-w-2xl font-medium">
                         {faq.answer}
                       </div>
                     </motion.div>
@@ -2054,13 +2071,13 @@ I'd like to know what could be improved to increase conversions.`;
               <h3 className="text-base sm:text-lg font-bold uppercase tracking-tight text-white">
                 Still not sure where to start?
               </h3>
-              <p className="text-white/40 text-xs sm:text-sm leading-relaxed font-medium">
+              <p className="text-white/70 text-xs sm:text-sm leading-relaxed font-medium">
                 Get a free landing page audit and we'll show you what we'd improve.
               </p>
               <div>
                 <button
                   onClick={handleAuditScroll}
-                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21] hover:text-white transition-colors duration-300 border-b border-[#FFDE21]/40 hover:border-white pb-1"
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21] hover:text-white transition-colors duration-300 border-b border-[#FFDE21]/40 hover:border-white pb-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded"
                 >
                   GET MY FREE AUDIT →
                 </button>
@@ -2089,7 +2106,7 @@ I'd like to know what could be improved to increase conversions.`;
           </h2>
 
           {/* Supporting Copy */}
-          <p className="text-white/50 text-base sm:text-xl max-w-xl mx-auto leading-relaxed font-medium">
+          <p className="text-white/75 text-base sm:text-xl max-w-xl mx-auto leading-relaxed font-medium">
             Your next customer might already be clicking. Let's make sure your landing page does its job.
           </p>
 
@@ -2102,7 +2119,7 @@ I'd like to know what could be improved to increase conversions.`;
                 e.preventDefault();
                 document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="group px-8 py-4 rounded-full font-bold tracking-wide border border-white/10 hover:bg-white/5 text-white active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] flex items-center gap-2"
+              className="group px-8 py-4 rounded-full font-bold tracking-wide border border-white/10 hover:bg-white/5 text-white active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
             >
               <span>View Our Work</span>
               <span className="group-hover:translate-x-0.5 transition-transform duration-300">→</span>
@@ -2124,10 +2141,10 @@ I'd like to know what could be improved to increase conversions.`;
               <div className="flex items-center gap-3">
                 <LogoPremium />
               </div>
-              <p className="text-white/50 text-sm leading-relaxed max-w-sm font-medium">
+              <p className="text-white/75 text-sm leading-relaxed max-w-sm font-medium">
                 Conversion-focused landing pages built to turn clicks into customers.
               </p>
-              <div className="text-white/30 text-xs font-semibold">
+              <div className="text-white/60 text-xs font-semibold">
                 Brazil-based. Working with businesses worldwide.
               </div>
             </div>
@@ -2144,7 +2161,7 @@ I'd like to know what could be improved to increase conversions.`;
                   <li>
                     <button 
                       onClick={handleAuditScroll}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Landing Pages
                     </button>
@@ -2152,7 +2169,7 @@ I'd like to know what could be improved to increase conversions.`;
                   <li>
                     <button 
                       onClick={handleAuditScroll}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Conversion Copy
                     </button>
@@ -2160,7 +2177,7 @@ I'd like to know what could be improved to increase conversions.`;
                   <li>
                     <button 
                       onClick={handleAuditScroll}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Development
                     </button>
@@ -2168,7 +2185,7 @@ I'd like to know what could be improved to increase conversions.`;
                   <li>
                     <button 
                       onClick={handleAuditScroll}
-                      className="text-xs font-semibold text-[#FFDE21] hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-[#FFDE21] hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Free Audit
                     </button>
@@ -2188,7 +2205,7 @@ I'd like to know what could be improved to increase conversions.`;
                         e.preventDefault();
                         document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
                       }}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Work
                     </button>
@@ -2199,7 +2216,7 @@ I'd like to know what could be improved to increase conversions.`;
                         e.preventDefault();
                         document.getElementById("process")?.scrollIntoView({ behavior: "smooth" });
                       }}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Process
                     </button>
@@ -2210,7 +2227,7 @@ I'd like to know what could be improved to increase conversions.`;
                         e.preventDefault();
                         document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
                       }}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       Pricing
                     </button>
@@ -2221,7 +2238,7 @@ I'd like to know what could be improved to increase conversions.`;
                         e.preventDefault();
                         document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
                       }}
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       FAQ
                     </button>
@@ -2240,10 +2257,11 @@ I'd like to know what could be improved to increase conversions.`;
                       href={`https://wa.me/${PUBLIC_WHATSAPP_NUMBER}?text=Hi!%20I%20found%20Ideal%20Landing%20Co.%20and%20I%27d%20like%20to%20talk%20about%20a%20landing%20page%20project.`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+                      aria-label="Contact us on WhatsApp (opens in new tab)"
+                      className="text-xs font-semibold text-white/70 hover:text-white transition-colors duration-200 flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded px-1"
                     >
                       <span>WhatsApp</span>
-                      <span className="text-[10px] text-white/20">↗</span>
+                      <span className="text-[10px] text-white/40">↗</span>
                     </a>
                   </li>
                 </ul>
@@ -2261,7 +2279,7 @@ I'd like to know what could be improved to increase conversions.`;
           </div>
 
           {/* Bottom Bar: Copyright / Legal */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 pt-8 text-[11px] font-bold uppercase tracking-widest text-white/25">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 pt-8 text-[11px] font-bold uppercase tracking-widest text-white/60">
             <p>© {new Date().getFullYear()} Ideal Landing Co.</p>
             <p>An Ideal Solutions company.</p>
           </div>

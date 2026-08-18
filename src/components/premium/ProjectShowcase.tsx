@@ -48,38 +48,38 @@ const ProjectPreview = ({ project }: { project: ProjectData }) => {
       <div className="flex gap-3 items-center">
         <button
           onClick={() => setHoverImg(null)}
-          className={`relative flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${
+          className={`relative flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] ${
             hoverImg === null
               ? "border-[#FFDE21] shadow-[0_0_12px_rgba(255,222,33,0.25)]"
-              : "border-white/10 opacity-50 hover:opacity-80"
+              : "border-white/10 opacity-60 hover:opacity-100"
           }`}
           style={{ width: 72, height: 48 }}
-          aria-label="Show cover image"
+          aria-label={`Show ${project.name} cover image`}
         >
-          <img src={project.coverImage} alt="Cover" className="w-full h-full object-cover object-top" loading="lazy" />
+          <img src={project.coverImage} alt={`${project.name} Cover`} className="w-full h-full object-cover object-top" loading="lazy" />
         </button>
 
         {project.sectionImages.map((src, i) => (
           <button
             key={src}
             onClick={() => setHoverImg(i)}
-            className={`relative flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${
+            className={`relative flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] ${
               hoverImg === i
                 ? "border-[#FFDE21] shadow-[0_0_12px_rgba(255,222,33,0.25)]"
-                : "border-white/10 opacity-50 hover:opacity-80"
+                : "border-white/10 opacity-60 hover:opacity-100"
             }`}
             style={{ width: 72, height: 48 }}
-            aria-label={`Show section ${i + 1}`}
+            aria-label={`Show ${project.name} section ${i + 1}`}
           >
-            <img src={src} alt={`Section ${i + 1}`} className="w-full h-full object-cover object-top" loading="lazy" />
+            <img src={src} alt={`${project.name} Section ${i + 1}`} className="w-full h-full object-cover object-top" loading="lazy" />
           </button>
         ))}
 
         <div
-          className="relative flex-shrink-0 overflow-hidden rounded-lg border border-white/10 opacity-40"
+          className="relative flex-shrink-0 overflow-hidden rounded-lg border border-white/10 opacity-60"
           style={{ width: 28, height: 48 }}
         >
-          <img src={project.mobileImage} alt="Mobile view" className="w-full h-full object-cover object-top" loading="lazy" />
+          <img src={project.mobileImage} alt={`${project.name} Mobile view`} className="w-full h-full object-cover object-top" loading="lazy" />
         </div>
       </div>
     </div>
@@ -108,24 +108,26 @@ const DesktopShowcase = () => {
               <span className="text-[#FFDE21] font-black text-sm tracking-[0.25em] tabular-nums">
                 {project.number}
               </span>
-              <div className="flex gap-1.5">
+              <div className="flex gap-1 items-center">
                 {projects.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => goTo(i)}
-                    className={`h-px transition-all duration-500 ${
-                      i === active ? "w-8 bg-[#FFDE21]" : "w-4 bg-white/20 hover:bg-white/40"
-                    }`}
+                    className="p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded"
                     aria-label={`Go to project ${i + 1}`}
-                  />
+                  >
+                    <span className={`block h-1 transition-all duration-500 rounded-full ${
+                      i === active ? "w-8 bg-[#FFDE21]" : "w-4 bg-white/40 hover:bg-white/70"
+                    }`} />
+                  </button>
                 ))}
               </div>
-              <span className="text-white/30 text-sm tracking-widest">
+              <span className="text-white/70 text-sm tracking-widest font-medium">
                 / {String(projects.length).padStart(2, "0")}
               </span>
             </div>
 
-            <p className="text-[#FFDE21]/70 text-[11px] font-black uppercase tracking-[0.3em] mb-4">
+            <p className="text-[#FFDE21] text-[11px] font-black uppercase tracking-[0.3em] mb-4">
               {project.category}
             </p>
 
@@ -140,11 +142,11 @@ const DesktopShowcase = () => {
               ))}
             </div>
 
-            <p className="text-white/40 text-xs font-black uppercase tracking-[0.2em] mb-4">
+            <p className="text-white/70 text-xs font-black uppercase tracking-[0.2em] mb-4">
               {project.projectType}
             </p>
 
-            <p className="text-white/60 text-base leading-relaxed mb-6 max-w-sm">
+            <p className="text-white/80 text-base leading-relaxed mb-6 max-w-sm font-medium">
               {project.description}
             </p>
 
@@ -152,7 +154,7 @@ const DesktopShowcase = () => {
               {project.services.map((s) => (
                 <span
                   key={s}
-                  className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/50 text-[11px] font-bold uppercase tracking-[0.15em]"
+                  className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 text-[11px] font-bold uppercase tracking-[0.15em]"
                 >
                   {s}
                 </span>
@@ -167,27 +169,28 @@ const DesktopShowcase = () => {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 px-6 py-3 rounded-full bg-[#FFDE21] text-black text-sm font-black uppercase tracking-widest hover:shadow-[0_0_30px_rgba(255,222,33,0.4)] transition-all duration-500"
+              className="group flex items-center gap-2 px-6 py-3 rounded-full bg-[#FFDE21] text-black text-sm font-black uppercase tracking-widest hover:shadow-[0_0_30px_rgba(255,222,33,0.4)] transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
             >
               View Live Site
               <ExternalLink className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           ) : (
-            <span className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-white/30 text-sm font-black uppercase tracking-widest cursor-default">
+            <span className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-white/60 text-sm font-black uppercase tracking-widest cursor-default">
               View Case Study
               <ArrowUpRight className="w-4 h-4" />
             </span>
           )}
         </div>
 
-        <div className="flex gap-4 mt-8 pt-6 border-t border-white/8">
+        <div className="flex gap-4 mt-8 pt-6 border-t border-white/10">
           {projects.map((p, i) => (
             <button
               key={p.id}
               onClick={() => goTo(i)}
-              className={`text-left transition-all duration-400 ${
-                i === active ? "opacity-100" : "opacity-30 hover:opacity-60"
+              className={`text-left transition-all duration-400 p-1.5 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] ${
+                i === active ? "opacity-100" : "opacity-60 hover:opacity-100"
               }`}
+              aria-label={`Select ${p.name}`}
             >
               <span className="block text-[10px] font-black text-[#FFDE21] tracking-widest mb-0.5">
                 {p.number}
@@ -224,7 +227,7 @@ const MobileShowcase = () => (
       <div key={p.id} className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
           <span className="text-[#FFDE21] font-black text-sm tracking-[0.25em]">{p.number}</span>
-          <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.25em]">{p.category}</span>
+          <span className="text-white/70 text-[10px] font-black uppercase tracking-[0.25em]">{p.category}</span>
         </div>
 
         <div>
@@ -235,7 +238,7 @@ const MobileShowcase = () => (
           ))}
         </div>
 
-        <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">{p.projectType}</p>
+        <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.2em]">{p.projectType}</p>
 
         <div
           className="w-full overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
@@ -249,13 +252,13 @@ const MobileShowcase = () => (
           />
         </div>
 
-        <p className="text-white/55 text-sm leading-relaxed">{p.description}</p>
+        <p className="text-white/80 text-sm leading-relaxed font-medium">{p.description}</p>
 
         <div className="flex flex-wrap gap-2">
           {p.services.map((s) => (
             <span
               key={s}
-              className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/50 text-[10px] font-bold uppercase tracking-[0.15em]"
+              className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-[0.15em]"
             >
               {s}
             </span>
@@ -267,19 +270,19 @@ const MobileShowcase = () => (
             href={p.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="self-start flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FFDE21] text-black text-xs font-black uppercase tracking-widest"
+            className="self-start flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FFDE21] text-black text-xs font-black uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
           >
             View Live Site
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         ) : (
-          <div className="self-start flex items-center gap-2 text-white/30 text-xs font-black uppercase tracking-widest">
+          <div className="self-start flex items-center gap-2 text-white/60 text-xs font-black uppercase tracking-widest">
             View Case Study
             <ArrowUpRight className="w-3.5 h-3.5" />
           </div>
         )}
 
-        {idx < projects.length - 1 && <div className="border-t border-white/8 mt-2" />}
+        {idx < projects.length - 1 && <div className="border-t border-white/10 mt-2" />}
       </div>
     ))}
   </div>
@@ -304,7 +307,7 @@ export const ProjectShowcase: React.FC = () => {
             Built to look good.{" "}
             <span className="text-[#FFDE21]">Designed to perform.</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-xl font-medium">
+          <p className="text-white/70 text-lg max-w-xl font-medium">
             Pages designed around business goals, not just aesthetics.
           </p>
         </motion.div>
