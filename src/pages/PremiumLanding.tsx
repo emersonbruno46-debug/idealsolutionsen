@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { 
   Palette, Share2, Globe, ArrowRight, Star, Sparkles, Gem,
   Instagram, Linkedin, Twitter, Menu, X
 } from "lucide-react";
 import { LogoPremium } from "@/components/premium/LogoPremium";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const useAutoScroll = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -343,6 +346,7 @@ const PremiumLanding = () => {
   const processScroll = useAutoScroll();
   const portfolioScroll = useAutoScroll();
   const heroRef = useRef<HTMLDivElement>(null);
+  const problemRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (!heroRef.current) return;
@@ -408,6 +412,83 @@ const PremiumLanding = () => {
       "-=0.4"
     );
   }, { scope: heroRef });
+
+  useGSAP(() => {
+    if (!problemRef.current) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      gsap.set([
+        ".problem-eyebrow",
+        ".problem-text-traffic",
+        ".problem-text-conversion",
+        ".vanity-word",
+        ".problem-details"
+      ], { opacity: 1, y: 0, yPercent: 0, scale: 1 });
+      return;
+    }
+
+    const mm = gsap.matchMedia();
+
+    // Desktop: Pinned scroll sequence
+    mm.add("(min-width: 1024px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: problemRef.current,
+          start: "top top",
+          end: "+=180%",
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1
+        }
+      });
+
+      // 1. Exibir eyebrow e iniciar "TRAFFIC ISN'T THE PROBLEM"
+      tl.to(".problem-eyebrow", { opacity: 1, y: 0, duration: 1 })
+        .to(".problem-text-traffic", { opacity: 1, duration: 1 }, "-=0.5")
+        
+        // 2. Trazer palavras secundárias
+        .to(".vanity-word", { opacity: 0.35, scale: 1, duration: 2, stagger: 0.6 }, "-=0.5")
+        
+        // 3. Diminuir dominância de "TRAFFIC"
+        .to(".problem-text-traffic", { opacity: 0.15, duration: 1.5 }, "-=0.5")
+        
+        // 4. Mostrar "CONVERSION IS"
+        .to(".problem-text-conversion", { opacity: 1, y: 0, duration: 2 }, "-=0.8")
+        
+        // 5. Detalhes finais e "WE FIX THAT"
+        .to(".problem-details", { opacity: 1, y: 0, duration: 2.5 }, "-=0.5");
+    });
+
+    // Mobile: Normal scroll entry
+    mm.add("(max-width: 1023px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: problemRef.current,
+          start: "top 75%",
+          toggleActions: "play none none none"
+        }
+      });
+
+      tl.to(".problem-eyebrow", { opacity: 1, y: 0, duration: 0.5 })
+        .to(".problem-text-traffic", { opacity: 1, duration: 0.5 }, "-=0.3")
+        .to(".problem-text-conversion", { opacity: 1, y: 0, duration: 0.6 }, "-=0.3")
+        .to(".problem-details", { opacity: 1, y: 0, duration: 0.8 }, "-=0.3");
+
+      gsap.to(".vanity-word", {
+        opacity: 0.25,
+        duration: 0.8,
+        stagger: 0.2,
+        scrollTrigger: {
+          trigger: problemRef.current,
+          start: "top 60%"
+        }
+      });
+    });
+
+    return () => {
+      mm.revert();
+    };
+  }, { scope: problemRef });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -695,6 +776,56 @@ const PremiumLanding = () => {
               </BentoCard>
 
             </div>
+          </div>
+        </section>
+
+        {/* Storytelling Problem Section */}
+        <section ref={problemRef} id="problem-section" className="relative bg-[#050505] overflow-hidden lg:h-[200vh] z-20">
+          <div className="problem-container min-h-screen flex flex-col justify-center items-center px-4 lg:px-8 max-w-5xl mx-auto py-20 lg:py-0 relative">
+            
+            {/* Eyebrow */}
+            <span className="problem-eyebrow inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-8 opacity-0 lg:translate-y-4">
+              THE REAL PROBLEM
+            </span>
+            
+            {/* Headline */}
+            <div className="relative text-center w-full z-10 mb-8 md:mb-12">
+              <h2 className="problem-title text-4xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-6">
+                <span className="problem-text-traffic block text-white/90">
+                  TRAFFIC ISN'T THE PROBLEM.
+                </span>
+                <span className="problem-text-conversion block text-[#FFDE21] drop-shadow-[0_0_80px_rgba(255,222,33,0.3)] mt-4 opacity-0 lg:translate-y-4">
+                  CONVERSION IS.
+                </span>
+              </h2>
+            </div>
+
+            {/* Secondary floating background vanity words */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/[0.015] border border-white/[0.02] px-4 py-2 rounded-xl top-[15%] left-[5%] md:left-[10%] uppercase tracking-widest opacity-0 lg:scale-95">
+                CLICKS
+              </span>
+              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/[0.015] border border-white/[0.02] px-4 py-2 rounded-xl top-[45%] right-[5%] md:right-[8%] uppercase tracking-widest opacity-0 lg:scale-95">
+                VISITORS
+              </span>
+              <span className="vanity-word absolute text-5xl md:text-9xl font-black text-white/[0.015] border border-white/[0.02] px-4 py-2 rounded-xl bottom-[18%] left-[10%] md:left-[15%] uppercase tracking-widest opacity-0 lg:scale-95">
+                TRAFFIC
+              </span>
+            </div>
+
+            {/* Supporting copy & end statement */}
+            <div className="problem-details text-center max-w-2xl mx-auto mt-6 flex flex-col items-center gap-6 opacity-0 lg:translate-y-8">
+              <p className="text-lg md:text-2xl text-white/60 leading-relaxed font-medium">
+                Getting people to click your ad is only half the job.
+              </p>
+              <p className="text-base md:text-xl text-white/40 leading-relaxed font-normal">
+                If your landing page is slow, unclear or generic, you're paying for visitors who never become customers.
+              </p>
+              <div className="problem-fix text-2xl md:text-4xl font-black text-[#FFDE21] uppercase tracking-widest mt-8 border-b-2 border-[#FFDE21] pb-2">
+                WE FIX THAT.
+              </div>
+            </div>
+
           </div>
         </section>
 
