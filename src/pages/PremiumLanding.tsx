@@ -1174,10 +1174,10 @@ const PremiumLanding = () => {
 
             {/* Supporting copy & end statement */}
             <div className="problem-details relative text-center max-w-2xl mx-auto mt-6 flex flex-col items-center gap-6 opacity-0 lg:translate-y-8 z-10">
-              <p className="text-lg md:text-2xl text-white/60 leading-relaxed font-medium">
+              <p className="text-lg md:text-2xl text-white/75 leading-relaxed font-medium">
                 Getting people to click your ad is only half the job.
               </p>
-              <p className="text-base md:text-xl text-white/40 leading-relaxed font-normal">
+              <p className="text-base md:text-xl text-white/70 leading-relaxed font-normal">
                 If your landing page is slow, unclear or generic, you're paying for visitors who never become customers.
               </p>
               <div className="problem-fix text-2xl md:text-4xl font-black text-[#FFDE21] uppercase tracking-widest mt-8 border-b-2 border-[#FFDE21] pb-2">
@@ -1216,16 +1216,16 @@ const PremiumLanding = () => {
                   {processSteps.map((step, idx) => (
                     <div key={idx} className="process-step relative flex gap-6 lg:gap-10 items-start">
                       {/* Bullet */}
-                      <div className="process-step-bullet flex-shrink-0 w-8 h-8 lg:w-12 lg:h-12 rounded-full border bg-[#050505] border-white/10 flex items-center justify-center text-xs lg:text-sm font-bold z-10 text-white/40 transition-colors duration-500">
+                      <div className="process-step-bullet flex-shrink-0 w-8 h-8 lg:w-12 lg:h-12 rounded-full border bg-[#050505] border-white/20 flex items-center justify-center text-xs lg:text-sm font-bold z-10 text-white/70 transition-colors duration-500">
                         {step.number}
                       </div>
 
                       {/* Content */}
                       <div className="process-step-content flex-grow pt-1 lg:pt-2 space-y-2">
-                        <h3 className="text-xl lg:text-3xl font-black uppercase tracking-tighter text-white/30 transition-colors duration-500">
+                        <h3 className="text-xl lg:text-3xl font-black uppercase tracking-tighter text-white/70 transition-colors duration-500">
                           {step.title}
                         </h3>
-                        <p className="text-white/20 text-sm lg:text-lg leading-relaxed font-medium transition-colors duration-500 max-w-xl">
+                        <p className="text-white/75 text-sm lg:text-lg leading-relaxed font-medium transition-colors duration-500 max-w-xl">
                           {step.desc}
                         </p>
                       </div>
@@ -1259,8 +1259,8 @@ const PremiumLanding = () => {
                 initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false }} transition={{ duration: 1.2, ease: premiumEasing }}
                 className="mb-4 lg:mb-0"
               >
-                <span className="inline-block px-3 py-1 bg-white/5 text-white/50 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">Social Proof</span>
-                <h2 className="text-4xl md:text-8xl font-black mb-10 leading-[0.9] tracking-tighter">The impact on brands that <br className="hidden md:block"/><span className="text-[#FFDE21]">perform.</span></h2>
+                <span className="inline-block px-3 py-1 bg-white/5 text-white/70 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">Social Proof</span>
+                <h2 className="text-4xl md:text-8xl font-black mb-10 leading-[0.9] tracking-tighter text-white">The impact on brands that <br className="hidden md:block"/><span className="text-[#FFDE21]">perform.</span></h2>
                 <MagneticCTA text="View Our Full Work" primary={false} />
               </motion.div>
 
@@ -1277,7 +1277,7 @@ const PremiumLanding = () => {
                     >
                       <DoubleBezelCard>
                         <Star className="w-6 h-6 md:w-8 md:h-8 text-[#FFDE21] mb-6 md:mb-8" />
-                        <p className="text-base md:text-xl text-white/70 leading-relaxed font-medium mb-8 md:mb-10">"{testimonialsData[activeTestimonial].text}"</p>
+                        <p className="text-base md:text-xl text-white/80 leading-relaxed font-medium mb-8 md:mb-10">"{testimonialsData[activeTestimonial].text}"</p>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center shrink-0">
                              <img 
@@ -1301,14 +1301,16 @@ const PremiumLanding = () => {
                 </div>
                 
                 {/* Dots Indicator */}
-                <div className="flex gap-2 mt-4 justify-center lg:justify-start">
+                <div className="flex gap-1 mt-4 justify-center lg:justify-start items-center">
                   {[0, 1, 2].map(i => (
                     <button 
                       key={i}
                       onClick={() => setActiveTestimonial(i)}
-                      className={`h-1.5 rounded-full transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${activeTestimonial === i ? 'w-8 bg-[#FFDE21]' : 'w-2 bg-white/20'}`}
+                      className="p-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFDE21] rounded-full"
                       aria-label={`View testimonial ${i + 1}`}
-                    />
+                    >
+                      <span className={`block h-1.5 rounded-full transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${activeTestimonial === i ? 'w-8 bg-[#FFDE21]' : 'w-3 bg-white/40 hover:bg-white/70'}`} />
+                    </button>
                   ))}
                 </div>
               </div>
@@ -1329,7 +1331,7 @@ const PremiumLanding = () => {
               <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-white">
                 Simple, transparent pricing.
               </h2>
-              <p className="text-white/40 text-base sm:text-lg leading-relaxed font-medium">
+              <p className="text-white/75 text-base sm:text-lg leading-relaxed font-medium">
                 Choose the level of support that fits your project.
               </p>
             </div>
