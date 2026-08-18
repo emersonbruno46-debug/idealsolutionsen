@@ -937,7 +937,7 @@ const PremiumLanding = () => {
       <main className="relative z-10 pt-28 pb-12">
         
         {/* Hero Z-Axis Cascade & Massive Typography */}
-        <section ref={heroRef} className="min-h-[90dvh] flex items-center justify-center pt-8 pb-0 lg:pt-12 lg:pb-20">
+        <section ref={heroRef} id="hero" className="min-h-[90dvh] flex items-center justify-center pt-8 pb-0 lg:pt-12 lg:pb-20">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-2 lg:gap-20 items-center">
               
@@ -1224,7 +1224,9 @@ const PremiumLanding = () => {
         </section>
 
         {/* Portfolio Section — ProjectShowcase */}
-        <ProjectShowcase />
+        <div id="work">
+          <ProjectShowcase />
+        </div>
 
         {/* Cinematic Testimonial Split */}
         <section id="testimonials" className="py-8 lg:py-20 relative">
@@ -2045,11 +2047,200 @@ I'd like to know what could be improved to increase conversions.`;
 
       </main>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-white/5 relative z-10 bg-[#020202]">
-        <div className="container mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-8">
-          <LogoPremium />
-          <p className="text-white/20 text-xs font-black uppercase tracking-[0.2em]">© {new Date().getFullYear()} Ideal Landing Co. All rights reserved.</p>
+      {/* Final CTA Section */}
+      <section id="final-cta" className="py-24 lg:py-40 relative z-10 bg-[#050505] border-t border-white/5 overflow-hidden">
+        <div className="container mx-auto px-4 lg:px-8 max-w-5xl text-center relative z-10 space-y-12">
+          
+          {/* Eyebrow */}
+          <span className="text-[#FFDE21] text-xs font-black uppercase tracking-[0.2em] block">
+            READY WHEN YOU ARE
+          </span>
+
+          {/* Headline */}
+          <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[1.05] sm:leading-[0.95] text-white">
+            Ready to turn<br />
+            more clicks into<br />
+            <span className="text-[#FFDE21] drop-shadow-[0_0_80px_rgba(255,222,33,0.25)]">Customers?</span>
+          </h2>
+
+          {/* Supporting Copy */}
+          <p className="text-white/50 text-base sm:text-xl max-w-xl mx-auto leading-relaxed font-medium">
+            Your next customer might already be clicking. Let's make sure your landing page does its job.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+            <MagneticCTA text="Get Your Free Audit" onClick={handleAuditScroll} />
+            
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="group px-8 py-4 rounded-full font-bold tracking-wide border border-white/10 hover:bg-white/5 text-white active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] flex items-center gap-2"
+            >
+              <span>View Our Work</span>
+              <span className="group-hover:translate-x-0.5 transition-transform duration-300">→</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Mega Footer */}
+      <footer className="py-20 lg:py-32 bg-[#020202] border-t border-white/5 relative z-10 text-left">
+        <div className="container mx-auto px-4 lg:px-8 max-w-6xl space-y-16">
+          
+          {/* Top: Brand info and Columns */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-20">
+            
+            {/* Brand block (5 cols) */}
+            <div className="md:col-span-5 space-y-6">
+              <div className="flex items-center gap-3">
+                <LogoPremium />
+              </div>
+              <p className="text-white/50 text-sm leading-relaxed max-w-sm font-medium">
+                Conversion-focused landing pages built to turn clicks into customers.
+              </p>
+              <div className="text-white/30 text-xs font-semibold">
+                Brazil-based. Working with businesses worldwide.
+              </div>
+            </div>
+
+            {/* Navigation Blocks (7 cols) */}
+            <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+              
+              {/* Services Column */}
+              <div className="space-y-4">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21]">
+                  SERVICES
+                </h4>
+                <ul className="space-y-2.5">
+                  <li>
+                    <button 
+                      onClick={handleAuditScroll}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      Landing Pages
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={handleAuditScroll}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      Conversion Copy
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={handleAuditScroll}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      Development
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={handleAuditScroll}
+                      className="text-xs font-semibold text-[#FFDE21] hover:text-white transition-colors duration-200"
+                    >
+                      Free Audit
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Explore Column */}
+              <div className="space-y-4">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21]">
+                  EXPLORE
+                </h4>
+                <ul className="space-y-2.5">
+                  <li>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      Work
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("process")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      Process
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      Pricing
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200"
+                    >
+                      FAQ
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact Column */}
+              <div className="space-y-4 col-span-2 sm:col-span-1">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21]">
+                  CONTACT
+                </h4>
+                <ul className="space-y-2.5">
+                  <li>
+                    <a 
+                      href={`https://wa.me/${PUBLIC_WHATSAPP_NUMBER}?text=Hi!%20I%20found%20Ideal%20Landing%20Co.%20and%20I%27d%20like%20to%20talk%20about%20a%20landing%20page%20project.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-white/50 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+                    >
+                      <span>WhatsApp</span>
+                      <span className="text-[10px] text-white/20">↗</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Large Brand Visual Wordmark Signature */}
+          <div className="border-t border-white/5 pt-10 md:pt-16 select-none opacity-85">
+            <h2 className="text-[9.5vw] font-black tracking-tighter leading-none text-white/90 text-center uppercase">
+              IDEAL LANDING CO.
+            </h2>
+          </div>
+
+          {/* Bottom Bar: Copyright / Legal */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 pt-8 text-[11px] font-bold uppercase tracking-widest text-white/25">
+            <p>© {new Date().getFullYear()} Ideal Landing Co.</p>
+            <p>An Ideal Solutions company.</p>
+          </div>
+
         </div>
       </footer>
     </div>
