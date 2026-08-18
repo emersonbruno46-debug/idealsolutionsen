@@ -591,10 +591,10 @@ const PremiumLanding = () => {
         )}
       </AnimatePresence>
 
-      <main className="relative z-10 pt-40 pb-20">
+      <main className="relative z-10 pt-28 pb-12">
         
         {/* Hero Z-Axis Cascade & Massive Typography */}
-        <section ref={heroRef} className="min-h-[90dvh] flex items-center justify-center pt-16 pb-0 lg:pt-24 lg:pb-32">
+        <section ref={heroRef} className="min-h-[90dvh] flex items-center justify-center pt-8 pb-0 lg:pt-12 lg:pb-20">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-2 lg:gap-20 items-center">
               
@@ -675,9 +675,9 @@ const PremiumLanding = () => {
         </section>
 
         {/* Asymmetrical Bento Grid - Services */}
-        <section id="services" className="py-12 lg:py-32">
+        <section id="services" className="py-8 lg:py-20">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="mb-24">
+            <div className="mb-12">
               <span className="inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-6">What We Deliver</span>
               <h2 className="text-3xl md:text-7xl font-black uppercase tracking-tighter">One page. One goal. <br/><span className="text-[#FFDE21]">More conversions.</span></h2>
             </div>
@@ -831,9 +831,9 @@ const PremiumLanding = () => {
         </section>
 
         {/* Process Section */}
-        <section id="process" className="py-12 lg:py-32 relative z-10">
+        <section id="process" className="py-8 lg:py-20 relative z-10">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="mb-20 text-center lg:text-left">
+            <div className="mb-12 text-center lg:text-left">
               <span className="inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-6">Our Workflow</span>
               <h2 className="text-3xl md:text-7xl font-black uppercase tracking-tighter text-white">Our <span className="text-[#FFDE21]">Process</span></h2>
             </div>
@@ -872,7 +872,7 @@ const PremiumLanding = () => {
         <ProjectShowcase />
 
         {/* Cinematic Testimonial Split */}
-        <section id="testimonials" className="py-12 lg:py-32 relative">
+        <section id="testimonials" className="py-8 lg:py-20 relative">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-20 items-center">
               
@@ -931,7 +931,7 @@ const PremiumLanding = () => {
         </section>
 
         {/* CTA Closing — nested architectural pattern */}
-        <section id="planos" className="py-16 lg:py-32">
+        <section id="planos" className="py-10 lg:py-20">
            <div className="container mx-auto px-4 lg:px-8">
               <motion.div 
                  initial={{ opacity: 0, scale: 0.95 }}

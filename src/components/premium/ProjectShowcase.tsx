@@ -1,11 +1,10 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { projects, ProjectData } from "@/data/projects";
 
 const premiumEasing = [0.32, 0.72, 0, 1] as const;
 
-// ─── Image Transition Config ────────────────────────────────
 const imageVariants = {
   enter: { opacity: 0, y: 24, scale: 0.98 },
   center: { opacity: 1, y: 0, scale: 1 },
@@ -21,13 +20,10 @@ const textVariants = {
 // ─── Desktop Project Preview ─────────────────────────────────
 const ProjectPreview = ({ project }: { project: ProjectData }) => {
   const [hoverImg, setHoverImg] = useState<number | null>(null);
-
-  const displayImg =
-    hoverImg !== null ? project.sectionImages[hoverImg] : project.coverImage;
+  const displayImg = hoverImg !== null ? project.sectionImages[hoverImg] : project.coverImage;
 
   return (
     <div className="relative w-full h-full flex flex-col gap-4">
-      {/* Main Screenshot */}
       <AnimatePresence mode="wait">
         <motion.div
           key={displayImg}
@@ -45,14 +41,11 @@ const ProjectPreview = ({ project }: { project: ProjectData }) => {
             className="w-full h-full object-cover object-top"
             loading="lazy"
           />
-          {/* Subtle inner vignette */}
           <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Thumbnail strip */}
       <div className="flex gap-3 items-center">
-        {/* cover thumbnail */}
         <button
           onClick={() => setHoverImg(null)}
           className={`relative flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${
@@ -63,12 +56,7 @@ const ProjectPreview = ({ project }: { project: ProjectData }) => {
           style={{ width: 72, height: 48 }}
           aria-label="Show cover image"
         >
-          <img
-            src={project.coverImage}
-            alt="Cover"
-            className="w-full h-full object-cover object-top"
-            loading="lazy"
-          />
+          <img src={project.coverImage} alt="Cover" className="w-full h-full object-cover object-top" loading="lazy" />
         </button>
 
         {project.sectionImages.map((src, i) => (
@@ -83,26 +71,15 @@ const ProjectPreview = ({ project }: { project: ProjectData }) => {
             style={{ width: 72, height: 48 }}
             aria-label={`Show section ${i + 1}`}
           >
-            <img
-              src={src}
-              alt={`Section ${i + 1}`}
-              className="w-full h-full object-cover object-top"
-              loading="lazy"
-            />
+            <img src={src} alt={`Section ${i + 1}`} className="w-full h-full object-cover object-top" loading="lazy" />
           </button>
         ))}
 
-        {/* Mobile thumb */}
         <div
           className="relative flex-shrink-0 overflow-hidden rounded-lg border border-white/10 opacity-40"
           style={{ width: 28, height: 48 }}
         >
-          <img
-            src={project.mobileImage}
-            alt="Mobile view"
-            className="w-full h-full object-cover object-top"
-            loading="lazy"
-          />
+          <img src={project.mobileImage} alt="Mobile view" className="w-full h-full object-cover object-top" loading="lazy" />
         </div>
       </div>
     </div>
@@ -113,16 +90,11 @@ const ProjectPreview = ({ project }: { project: ProjectData }) => {
 const DesktopShowcase = () => {
   const [active, setActive] = useState(0);
   const project = projects[active];
-
-  const goTo = useCallback((idx: number) => {
-    setActive(idx);
-  }, []);
+  const goTo = useCallback((idx: number) => { setActive(idx); }, []);
 
   return (
-    <div className="hidden lg:grid grid-cols-[1fr_1.4fr] gap-16 xl:gap-24 items-start min-h-[680px]">
-      {/* Left — Metadata panel */}
+    <div className="hidden lg:grid grid-cols-[1fr_1.4fr] gap-16 xl:gap-24 items-start min-h-[640px]">
       <div className="flex flex-col justify-between h-full py-2">
-        {/* Counter + category */}
         <AnimatePresence mode="wait">
           <motion.div
             key={project.id + "-meta"}
@@ -132,8 +104,7 @@ const DesktopShowcase = () => {
             exit="exit"
             transition={{ duration: 0.45, ease: premiumEasing }}
           >
-            {/* Project counter */}
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4 mb-6">
               <span className="text-[#FFDE21] font-black text-sm tracking-[0.25em] tabular-nums">
                 {project.number}
               </span>
@@ -143,9 +114,7 @@ const DesktopShowcase = () => {
                     key={i}
                     onClick={() => goTo(i)}
                     className={`h-px transition-all duration-500 ${
-                      i === active
-                        ? "w-8 bg-[#FFDE21]"
-                        : "w-4 bg-white/20 hover:bg-white/40"
+                      i === active ? "w-8 bg-[#FFDE21]" : "w-4 bg-white/20 hover:bg-white/40"
                     }`}
                     aria-label={`Go to project ${i + 1}`}
                   />
@@ -156,13 +125,11 @@ const DesktopShowcase = () => {
               </span>
             </div>
 
-            {/* Category */}
-            <p className="text-[#FFDE21]/70 text-[11px] font-black uppercase tracking-[0.3em] mb-5">
+            <p className="text-[#FFDE21]/70 text-[11px] font-black uppercase tracking-[0.3em] mb-4">
               {project.category}
             </p>
 
-            {/* Name — large editorial */}
-            <div className="mb-5">
+            <div className="mb-4">
               {project.nameLines.map((line, i) => (
                 <h3
                   key={i}
@@ -173,18 +140,15 @@ const DesktopShowcase = () => {
               ))}
             </div>
 
-            {/* Project type */}
-            <p className="text-white/40 text-xs font-black uppercase tracking-[0.2em] mb-6">
+            <p className="text-white/40 text-xs font-black uppercase tracking-[0.2em] mb-4">
               {project.projectType}
             </p>
 
-            {/* Description */}
-            <p className="text-white/60 text-base leading-relaxed mb-8 max-w-sm">
+            <p className="text-white/60 text-base leading-relaxed mb-6 max-w-sm">
               {project.description}
             </p>
 
-            {/* Services */}
-            <div className="flex flex-wrap gap-2 mb-10">
+            <div className="flex flex-wrap gap-2 mb-8">
               {project.services.map((s) => (
                 <span
                   key={s}
@@ -197,7 +161,6 @@ const DesktopShowcase = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* CTAs */}
         <div className="flex flex-wrap items-center gap-4">
           {project.liveUrl ? (
             <a
@@ -217,8 +180,7 @@ const DesktopShowcase = () => {
           )}
         </div>
 
-        {/* Project navigation dots */}
-        <div className="flex gap-4 mt-10 pt-8 border-t border-white/8">
+        <div className="flex gap-4 mt-8 pt-6 border-t border-white/8">
           {projects.map((p, i) => (
             <button
               key={p.id}
@@ -238,7 +200,6 @@ const DesktopShowcase = () => {
         </div>
       </div>
 
-      {/* Right — Preview panel */}
       <AnimatePresence mode="wait">
         <motion.div
           key={project.id + "-preview"}
@@ -258,36 +219,24 @@ const DesktopShowcase = () => {
 
 // ─── Mobile: Vertical editorial list ────────────────────────
 const MobileShowcase = () => (
-  <div className="lg:hidden flex flex-col gap-20">
+  <div className="lg:hidden flex flex-col gap-16">
     {projects.map((p, idx) => (
-      <div key={p.id} className="flex flex-col gap-5">
-        {/* Number + category */}
+      <div key={p.id} className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
-          <span className="text-[#FFDE21] font-black text-sm tracking-[0.25em]">
-            {p.number}
-          </span>
-          <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.25em]">
-            {p.category}
-          </span>
+          <span className="text-[#FFDE21] font-black text-sm tracking-[0.25em]">{p.number}</span>
+          <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.25em]">{p.category}</span>
         </div>
 
-        {/* Name */}
         <div>
           {p.nameLines.map((line, i) => (
-            <h3
-              key={i}
-              className="text-4xl font-black uppercase tracking-tighter leading-none text-white block"
-            >
+            <h3 key={i} className="text-4xl font-black uppercase tracking-tighter leading-none text-white block">
               {line}
             </h3>
           ))}
         </div>
 
-        <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">
-          {p.projectType}
-        </p>
+        <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">{p.projectType}</p>
 
-        {/* Cover image */}
         <div
           className="w-full overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
           style={{ aspectRatio: "16/10" }}
@@ -300,10 +249,8 @@ const MobileShowcase = () => (
           />
         </div>
 
-        {/* Description */}
         <p className="text-white/55 text-sm leading-relaxed">{p.description}</p>
 
-        {/* Services */}
         <div className="flex flex-wrap gap-2">
           {p.services.map((s) => (
             <span
@@ -315,7 +262,6 @@ const MobileShowcase = () => (
           ))}
         </div>
 
-        {/* CTA */}
         {p.liveUrl ? (
           <a
             href={p.liveUrl}
@@ -333,9 +279,7 @@ const MobileShowcase = () => (
           </div>
         )}
 
-        {idx < projects.length - 1 && (
-          <div className="border-t border-white/8 mt-2" />
-        )}
+        {idx < projects.length - 1 && <div className="border-t border-white/8 mt-2" />}
       </div>
     ))}
   </div>
@@ -344,20 +288,19 @@ const MobileShowcase = () => (
 // ─── Main export ─────────────────────────────────────────────
 export const ProjectShowcase: React.FC = () => {
   return (
-    <section id="work" className="relative py-24 lg:py-40 bg-[#050505] z-10">
+    <section id="work" className="relative py-12 lg:py-16 bg-[#050505] z-10">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Section intro */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-120px" }}
           transition={{ duration: 1.1, ease: premiumEasing }}
-          className="mb-20 lg:mb-28"
+          className="mb-10 lg:mb-12"
         >
           <span className="inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
             Selected Work
           </span>
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-white mb-5">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-white mb-4">
             Built to look good.{" "}
             <span className="text-[#FFDE21]">Designed to perform.</span>
           </h2>
@@ -366,7 +309,6 @@ export const ProjectShowcase: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* Showcase */}
         <DesktopShowcase />
         <MobileShowcase />
       </div>
