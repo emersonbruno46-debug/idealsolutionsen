@@ -364,6 +364,63 @@ const processSteps = [
   }
 ];
 
+const pricingPackages = [
+  {
+    id: "launch",
+    name: "LAUNCH",
+    price: "690",
+    tagline: "Design + Build",
+    desc: "Best for businesses that already have their copy and strategy.",
+    features: [
+      "Custom landing page design",
+      "Development",
+      "Responsive on all devices",
+      "Basic integrations",
+      "Client provides the copy"
+    ],
+    ctaText: "START YOUR PROJECT",
+    recommended: false,
+    orderClass: "order-2 lg:order-1"
+  },
+  {
+    id: "conversion",
+    name: "CONVERSION",
+    price: "990",
+    tagline: "MOST POPULAR",
+    desc: "Best for businesses that want the complete conversion-focused landing page package.",
+    features: [
+      "Conversion strategy",
+      "Conversion-focused copywriting",
+      "Custom landing page design",
+      "Full development",
+      "Mobile responsive",
+      "Forms and integrations",
+      "Analytics setup",
+      "Launch support"
+    ],
+    ctaText: "BUILD MY LANDING PAGE",
+    recommended: true,
+    orderClass: "order-1 lg:order-2"
+  },
+  {
+    id: "campaign",
+    name: "CAMPAIGN",
+    price: "1,490",
+    tagline: "Advanced Campaigns",
+    desc: "Best for paid traffic campaigns requiring deeper tracking and optimization.",
+    features: [
+      "Everything in Conversion",
+      "Ad-to-page message matching",
+      "Advanced tracking setup",
+      "Additional page or campaign variation",
+      "Post-launch optimization"
+    ],
+    ctaText: "START MY CAMPAIGN",
+    recommended: false,
+    orderClass: "order-3 lg:order-3"
+  }
+];
+
 const PremiumLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -371,6 +428,7 @@ const PremiumLanding = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const problemRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (!heroRef.current) return;
@@ -630,6 +688,28 @@ const PremiumLanding = () => {
       mm.revert();
     };
   }, { scope: processRef });
+
+  useGSAP(() => {
+    if (!pricingRef.current) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    gsap.fromTo(".pricing-card",
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: pricingRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        }
+      }
+    );
+  }, { scope: pricingRef });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -1082,34 +1162,115 @@ const PremiumLanding = () => {
           </div>
         </section>
 
-        {/* CTA Closing — nested architectural pattern */}
-        <section id="planos" className="py-10 lg:py-20">
-           <div className="container mx-auto px-4 lg:px-8">
-              <motion.div 
-                 initial={{ opacity: 0, scale: 0.95 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: false }}
-                 transition={{ duration: 1.2, ease: premiumEasing }}
-                 className="relative p-1.5 rounded-[2rem] lg:rounded-[3rem] bg-gradient-to-b from-[#FFDE21]/20 to-transparent"
-              >
-                 <div className="absolute inset-0 bg-[#FFDE21]/5 blur-3xl -z-10 rounded-[2rem] lg:rounded-[3rem]" />
-                 <div className="rounded-[calc(2rem-0.375rem)] lg:rounded-[calc(3rem-0.375rem)] bg-[#050505] p-8 py-16 md:p-32 text-center relative overflow-hidden flex flex-col items-center">
-                    
-                    <span className="inline-block px-4 py-2 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] mb-8 lg:mb-10">
-                      Limited Spots
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl md:text-8xl font-black mb-8 lg:mb-10 leading-[1.1] md:leading-tight tracking-tighter">
-                       You're already paying for traffic. <span className="text-[#FFDE21]">Make the landing page worth the click.</span>
-                    </h2>
-                    <p className="text-white/40 text-lg md:text-xl max-w-2xl mb-12 lg:mb-16 leading-relaxed">
-                       Send us your current landing page and we'll show you exactly what's stopping more visitors from becoming customers.
-                    </p>
-                    
-                    <MagneticCTA text="Get My Free Audit" className="text-base sm:text-xl px-8 sm:px-12 py-4 sm:py-6" />
+        {/* Pricing Section */}
+        <section ref={pricingRef} id="pricing" className="py-20 lg:py-32 relative z-10 bg-[#050505] border-t border-white/5">
+          <div className="container mx-auto px-4 lg:px-8">
+            
+            {/* Section Header */}
+            <div className="mb-16 lg:mb-24 text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-[#FFDE21] text-xs font-black uppercase tracking-[0.2em] block">
+                PRICING
+              </span>
+              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-white">
+                Simple, transparent pricing.
+              </h2>
+              <p className="text-white/40 text-base sm:text-lg leading-relaxed font-medium">
+                Choose the level of support that fits your project.
+              </p>
+            </div>
 
-                 </div>
-              </motion.div>
-           </div>
+            {/* Pricing Cards Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-7xl mx-auto">
+              {pricingPackages.map((pkg) => (
+                <div 
+                  key={pkg.id} 
+                  className={`pricing-card flex flex-col justify-between rounded-[2rem] p-8 lg:p-10 relative transition-all duration-500 hover:scale-[1.01] ${pkg.orderClass} ${
+                    pkg.recommended 
+                      ? "bg-white/[0.04] border-2 border-[#FFDE21]/80 shadow-[0_0_40px_rgba(255,222,33,0.15)]" 
+                      : "bg-white/[0.01] border border-white/10"
+                  }`}
+                >
+                  {/* Badge for Recommended */}
+                  {pkg.recommended && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FFDE21] text-black text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-[0_4px_20px_rgba(255,222,33,0.3)]">
+                      {pkg.tagline}
+                    </div>
+                  )}
+
+                  {/* Top content */}
+                  <div>
+                    {/* Header */}
+                    <div className="mb-6">
+                      <span className="text-[10px] font-black tracking-widest text-[#FFDE21]/70 uppercase block mb-2">
+                        {pkg.recommended ? "RECOMMENDED" : pkg.tagline}
+                      </span>
+                      <h3 className="text-2xl font-black uppercase tracking-tight text-white">
+                        {pkg.name}
+                      </h3>
+                      <p className="text-white/40 text-xs mt-2 leading-relaxed font-medium min-h-[32px]">
+                        {pkg.desc}
+                      </p>
+                    </div>
+
+                    {/* Price */}
+                    <div className="border-y border-white/5 py-6 my-6 flex flex-col items-start justify-center">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-5xl lg:text-6xl font-black text-white tracking-tighter">
+                          ${pkg.price}
+                        </span>
+                      </div>
+                      <span className="text-[9px] font-black tracking-widest text-white/30 uppercase mt-2">
+                        ONE-TIME PROJECT
+                      </span>
+                    </div>
+
+                    {/* Features List */}
+                    <ul className="space-y-4 mb-8">
+                      {pkg.features.map((feature, fIdx) => (
+                        <li key={fIdx} className="flex items-start text-xs sm:text-sm text-white/70 font-medium">
+                          {/* Check Icon */}
+                          <svg className="w-4 h-4 text-[#FFDE21] mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* CTA Button */}
+                  <button
+                    onClick={handleContact}
+                    className={`w-full group font-bold tracking-wider text-xs py-4 rounded-full flex items-center justify-center gap-2 transition-all duration-300 ${
+                      pkg.recommended
+                        ? "bg-[#FFDE21] text-black shadow-[0_0_20px_rgba(255,222,33,0.2)] hover:shadow-[0_0_30px_rgba(255,222,33,0.3)] hover:scale-[1.02] active:scale-[0.98]"
+                        : "bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98]"
+                    }`}
+                  >
+                    <span>{pkg.ctaText}</span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust Banner / Microcopy */}
+            <div className="mt-16 lg:mt-24 text-center max-w-2xl mx-auto space-y-6 border-t border-white/5 pt-12">
+              <p className="text-white/60 text-base sm:text-lg leading-relaxed font-medium">
+                Not sure which option fits your project?
+              </p>
+              <p className="text-white/40 text-sm leading-relaxed font-normal -mt-4">
+                Get a free landing page audit and we'll help you identify what you actually need.
+              </p>
+              <button 
+                onClick={handleContact}
+                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#FFDE21] hover:text-white transition-colors duration-300 border-b border-[#FFDE21] hover:border-white pb-1"
+              >
+                GET A FREE AUDIT →
+              </button>
+            </div>
+
+          </div>
         </section>
 
       </main>
