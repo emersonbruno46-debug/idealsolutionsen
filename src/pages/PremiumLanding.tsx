@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { 
   Palette, Share2, Globe, ArrowRight, Star, Sparkles, Gem,
   Instagram, Linkedin, Twitter, Menu, X
@@ -129,7 +131,7 @@ const handleContact = () => {
 const MagneticCTA = ({ text, className = "", primary = true }: { text: string, className?: string, primary?: boolean }) => (
   <button 
     onClick={handleContact}
-    className={`group relative pl-8 pr-[4.5rem] py-4 rounded-full font-bold tracking-wide active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+    className={`group relative pl-8 pr-[4.5rem] py-4 rounded-full font-bold tracking-wide active:scale-[0.98] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] ${
       primary 
         ? "bg-[#FFDE21] text-black shadow-[0_0_30px_rgba(255,222,33,0.3)] hover:shadow-[0_0_50px_rgba(255,222,33,0.5)]" 
         : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
@@ -170,6 +172,72 @@ const PremiumLanding = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const processScroll = useAutoScroll();
   const portfolioScroll = useAutoScroll();
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!heroRef.current) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      gsap.set([
+        ".hero-eyebrow",
+        ".hero-title-line",
+        ".hero-desc",
+        ".hero-ctas",
+        ".hero-image-container",
+        ".hero-floating-badge"
+      ], { opacity: 1, y: 0, yPercent: 0 });
+      return;
+    }
+    const isMobile = window.innerWidth < 768;
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    // Eyebrow
+    tl.fromTo(
+      ".hero-eyebrow",
+      { opacity: 0, y: isMobile ? 8 : 15 },
+      { opacity: 1, y: 0, duration: 0.5 }
+    );
+
+    // Title lines
+    tl.fromTo(
+      ".hero-title-line",
+      { opacity: 0, yPercent: isMobile ? 40 : 110 },
+      { opacity: 1, yPercent: 0, duration: isMobile ? 0.6 : 0.8, stagger: isMobile ? 0.08 : 0.12 },
+      "-=0.3"
+    );
+
+    // Desc
+    tl.fromTo(
+      ".hero-desc",
+      { opacity: 0, y: isMobile ? 10 : 20 },
+      { opacity: 1, y: 0, duration: 0.7 },
+      "-=0.4"
+    );
+
+    // CTAs
+    tl.fromTo(
+      ".hero-ctas",
+      { opacity: 0, y: isMobile ? 8 : 15 },
+      { opacity: 1, y: 0, duration: 0.5 },
+      "-=0.4"
+    );
+
+    // Image container
+    tl.fromTo(
+      ".hero-image-container",
+      { opacity: 0, scale: 0.98, y: isMobile ? 10 : 20 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.9 },
+      "-=0.7"
+    );
+
+    // Floating Badge
+    tl.fromTo(
+      ".hero-floating-badge",
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.5 },
+      "-=0.4"
+    );
+  }, { scope: heroRef });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -274,54 +342,54 @@ const PremiumLanding = () => {
       <main className="relative z-10 pt-40 pb-20">
         
         {/* Hero Z-Axis Cascade & Massive Typography */}
-        <section className="min-h-[90dvh] flex items-center justify-center pt-16 pb-0 lg:pt-24 lg:pb-32">
+        <section ref={heroRef} className="min-h-[90dvh] flex items-center justify-center pt-16 pb-0 lg:pt-24 lg:pb-32">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-2 lg:gap-20 items-center">
               
               <div className="relative z-10 text-center lg:text-left">
-                <motion.h1 
-                  custom={1} variants={fadeUp} initial="hidden" animate="visible"
-                  className="text-4xl sm:text-6xl md:text-8xl font-black mb-8 md:mb-10 leading-[1.1] md:leading-[0.85] tracking-tighter mt-4 md:mt-0"
-                >
-                  Your ads are getting clicks. <br className="hidden md:block" />
-                  <span className="text-[#FFDE21] drop-shadow-[0_0_80px_rgba(255,222,33,0.3)]">
-                    Your page should get customers.
+                <div className="hero-eyebrow inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
+                  CONVERSION-FOCUSED LANDING PAGES
+                </div>
+
+                <h1 className="hero-title text-4xl sm:text-6xl md:text-8xl font-black mb-8 md:mb-10 leading-[1.1] md:leading-[0.85] tracking-tighter mt-4 md:mt-0">
+                  <span className="hero-title-line-wrapper block overflow-hidden">
+                    <span className="hero-title-line block">
+                      Your ads are getting clicks.
+                    </span>
                   </span>
-                </motion.h1>
+                  <span className="hero-title-line-wrapper block overflow-hidden">
+                    <span className="hero-title-line block text-[#FFDE21] drop-shadow-[0_0_80px_rgba(255,222,33,0.3)]">
+                      Your page should get customers.
+                    </span>
+                  </span>
+                </h1>
 
-                <motion.p 
-                  custom={2} variants={fadeUp} initial="hidden" animate="visible"
-                  className="text-lg md:text-2xl text-white/50 max-w-2xl mx-auto lg:mx-0 mb-16 leading-relaxed font-medium"
-                >
+                <p className="hero-desc text-lg md:text-2xl text-white/50 max-w-2xl mx-auto lg:mx-0 mb-16 leading-relaxed font-medium">
                   We create conversion-focused landing pages built to turn paid traffic into leads, booked calls and sales.
-                </motion.p>
+                </p>
 
-                <motion.div 
-                  custom={3} variants={fadeUp} initial="hidden" animate="visible"
-                  className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-8"
-                >
+                <div className="hero-ctas flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-8">
                   <MagneticCTA text="Get Your Free Landing Page Audit" />
-                </motion.div>
+                </div>
               </div>
 
               {/* Hero Image */}
-              <motion.div 
-                custom={4} variants={fadeUp} initial="hidden" animate="visible"
-                className="relative mt-2 -mb-24 lg:mb-0 lg:mt-0 lg:-translate-x-8 xl:-translate-x-16"
-              >
+              <div className="hero-image-container relative mt-2 -mb-24 lg:mb-0 lg:mt-0 lg:-translate-x-8 xl:-translate-x-16">
                  <div className="relative flex justify-center items-end group w-full lg:w-[130%] xl:w-[160%] lg:-ml-[15%] xl:-ml-[30%]">
                     <div className="relative inline-block">
                       {/* Yellow Flare Behind Image */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-[#FFDE21]/20 rounded-full blur-[100px] lg:blur-[140px] z-0 animate-[pulse_6s_ease-in-out_infinite]" />
                       
                       <motion.div
-                        variants={{
-                           visible: { 
-                              y: [0, -15, 0],
-                              transition: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-                           }
+                        animate={{ 
+                           y: [0, -15, 0]
                         }}
-                        className="relative z-10"
+                        transition={{ 
+                           duration: 6, 
+                           repeat: Infinity, 
+                           ease: "easeInOut" 
+                        }}
+                        className="relative z-10 hero-image-loop"
                       >
                         <img 
                           src="/hero-image.png" 
@@ -331,7 +399,7 @@ const PremiumLanding = () => {
                       </motion.div>
                       
                       {/* Floating Element over the image */}
-                      <div className="absolute bottom-[20%] -left-2 sm:bottom-[25%] sm:left-4 lg:bottom-[30%] lg:left-0 xl:bottom-[35%] xl:left-8 z-30 p-1 sm:p-1.5 rounded-[2rem] sm:rounded-[2.5rem] bg-white/10 border border-white/20 ring-1 ring-white/10 backdrop-blur-2xl shadow-[0_8px_32px_rgba(255,255,255,0.1)] scale-75 sm:scale-100 origin-left animate-[float-flare-sm_8s_ease-in-out_infinite_alternate] sm:animate-[float-flare_6s_ease-in-out_infinite_alternate]">
+                      <div className="hero-floating-badge absolute bottom-[20%] -left-2 sm:bottom-[25%] sm:left-4 lg:bottom-[30%] lg:left-0 xl:bottom-[35%] xl:left-8 z-30 p-1 sm:p-1.5 rounded-[2rem] sm:rounded-[2.5rem] bg-white/10 border border-white/20 ring-1 ring-white/10 backdrop-blur-2xl shadow-[0_8px_32px_rgba(255,255,255,0.1)] scale-75 sm:scale-100 origin-left animate-[float-flare-sm_8s_ease-in-out_infinite_alternate] sm:animate-[float-flare_6s_ease-in-out_infinite_alternate]">
                         <div className="rounded-[calc(2rem-0.375rem)] sm:rounded-[calc(2.5rem-0.375rem)] bg-white/5 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
                           <div className="relative w-9 h-9 sm:w-12 sm:h-12 bg-gradient-to-br from-[#FFDE21] to-yellow-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/30">
                              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
@@ -348,7 +416,7 @@ const PremiumLanding = () => {
                       </div>
                     </div>
                  </div>
-              </motion.div>
+              </div>
 
             </div>
           </div>
