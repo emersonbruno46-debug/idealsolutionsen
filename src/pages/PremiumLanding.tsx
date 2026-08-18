@@ -447,7 +447,7 @@ const PremiumLanding = () => {
         .to(".problem-text-traffic", { opacity: 1, duration: 1 }, "-=0.5")
         
         // 2. Trazer palavras secundárias
-        .to(".vanity-word", { opacity: 0.35, scale: 1, duration: 2, stagger: 0.6 }, "-=0.5")
+        .to(".vanity-word", { opacity: 1, scale: 1, duration: 2, stagger: 0.6 }, "-=0.5")
         
         // 3. Diminuir dominância de "TRAFFIC"
         .to(".problem-text-traffic", { opacity: 0.15, duration: 1.5 }, "-=0.5")
@@ -475,7 +475,7 @@ const PremiumLanding = () => {
         .to(".problem-details", { opacity: 1, y: 0, duration: 0.8 }, "-=0.3");
 
       gsap.to(".vanity-word", {
-        opacity: 0.25,
+        opacity: 1,
         duration: 0.8,
         stagger: 0.2,
         scrollTrigger: {
@@ -802,13 +802,13 @@ const PremiumLanding = () => {
 
             {/* Secondary floating background vanity words */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/[0.015] border border-white/[0.02] px-4 py-2 rounded-xl top-[15%] left-[5%] md:left-[10%] uppercase tracking-widest opacity-0 lg:scale-95">
+              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/20 border border-white/5 px-4 py-2 rounded-xl top-[15%] left-[5%] md:left-[10%] uppercase tracking-widest opacity-0 lg:scale-95">
                 CLICKS
               </span>
-              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/[0.015] border border-white/[0.02] px-4 py-2 rounded-xl top-[45%] right-[5%] md:right-[8%] uppercase tracking-widest opacity-0 lg:scale-95">
+              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/20 border border-white/5 px-4 py-2 rounded-xl top-[45%] right-[5%] md:right-[8%] uppercase tracking-widest opacity-0 lg:scale-95">
                 VISITORS
               </span>
-              <span className="vanity-word absolute text-5xl md:text-9xl font-black text-white/[0.015] border border-white/[0.02] px-4 py-2 rounded-xl bottom-[18%] left-[10%] md:left-[15%] uppercase tracking-widest opacity-0 lg:scale-95">
+              <span className="vanity-word absolute text-5xl md:text-9xl font-black text-white/20 border border-white/5 px-4 py-2 rounded-xl bottom-[18%] left-[10%] md:left-[15%] uppercase tracking-widest opacity-0 lg:scale-95">
                 TRAFFIC
               </span>
             </div>
