@@ -447,7 +447,7 @@ const PremiumLanding = () => {
         .to(".problem-text-traffic", { opacity: 1, duration: 1 }, "-=0.5")
         
         // 2. Trazer palavras secundárias
-        .to(".vanity-word", { opacity: 1, scale: 1, duration: 2, stagger: 0.6 }, "-=0.5")
+        .to(".vanity-word", { opacity: 0.35, scale: 1, duration: 2, stagger: 0.6 }, "-=0.5")
         
         // 3. Diminuir dominância de "TRAFFIC"
         .to(".problem-text-traffic", { opacity: 0.15, duration: 1.5 }, "-=0.5")
@@ -475,7 +475,7 @@ const PremiumLanding = () => {
         .to(".problem-details", { opacity: 1, y: 0, duration: 0.8 }, "-=0.3");
 
       gsap.to(".vanity-word", {
-        opacity: 1,
+        opacity: 0.25,
         duration: 0.8,
         stagger: 0.2,
         scrollTrigger: {
@@ -784,7 +784,7 @@ const PremiumLanding = () => {
           <div className="problem-container min-h-screen flex flex-col justify-center items-center px-4 lg:px-8 max-w-5xl mx-auto py-20 lg:py-0 relative">
             
             {/* Eyebrow */}
-            <span className="problem-eyebrow inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-8 opacity-0 lg:translate-y-4">
+            <span className="problem-eyebrow inline-block px-3 py-1 bg-[#FFDE21]/10 text-[#FFDE21] rounded-full text-[10px] font-black uppercase tracking-widest mb-8 opacity-0 lg:translate-y-4 z-10">
               THE REAL PROBLEM
             </span>
             
@@ -801,20 +801,20 @@ const PremiumLanding = () => {
             </div>
 
             {/* Secondary floating background vanity words */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/20 border border-white/5 px-4 py-2 rounded-xl top-[15%] left-[5%] md:left-[10%] uppercase tracking-widest opacity-0 lg:scale-95">
+            <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/10 border border-white/5 px-4 py-2 rounded-xl top-[15%] left-[2%] lg:left-[5%] uppercase tracking-widest opacity-0 lg:scale-95">
                 CLICKS
               </span>
-              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/20 border border-white/5 px-4 py-2 rounded-xl top-[45%] right-[5%] md:right-[8%] uppercase tracking-widest opacity-0 lg:scale-95">
+              <span className="vanity-word absolute text-4xl md:text-8xl font-black text-white/10 border border-white/5 px-4 py-2 rounded-xl top-[48%] right-[2%] lg:right-[5%] uppercase tracking-widest opacity-0 lg:scale-95">
                 VISITORS
               </span>
-              <span className="vanity-word absolute text-5xl md:text-9xl font-black text-white/20 border border-white/5 px-4 py-2 rounded-xl bottom-[18%] left-[10%] md:left-[15%] uppercase tracking-widest opacity-0 lg:scale-95">
+              <span className="vanity-word absolute text-5xl md:text-9xl font-black text-white/10 border border-white/5 px-4 py-2 rounded-xl bottom-[18%] left-[5%] lg:left-[8%] uppercase tracking-widest opacity-0 lg:scale-95">
                 TRAFFIC
               </span>
             </div>
 
             {/* Supporting copy & end statement */}
-            <div className="problem-details text-center max-w-2xl mx-auto mt-6 flex flex-col items-center gap-6 opacity-0 lg:translate-y-8">
+            <div className="problem-details relative text-center max-w-2xl mx-auto mt-6 flex flex-col items-center gap-6 opacity-0 lg:translate-y-8 z-10">
               <p className="text-lg md:text-2xl text-white/60 leading-relaxed font-medium">
                 Getting people to click your ad is only half the job.
               </p>
